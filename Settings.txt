@@ -1,0 +1,40 @@
+---------------------
+  General Settings
+---------------------
+scriptsFolderName = Scripts
+ttsModel = tts_models/en/jenny/jenny
+language = en
+emotion = None
+speed = 1
+whisperModel = small
+outputAudioName = outputAudio.mp3
+subtitleOutputFileName = titles
+outputVideoName = videoOutput.mp4
+videoBackground = backgroundVideos
+loopAllModels = False
+---------------------
+  Subtitle Settings
+---------------------
+Name = Default
+Fontname = Arial
+Fontsize = 16
+PrimaryColour = &Hffffff
+SecondaryColour = &Hffffff
+OutlineColour = &H0
+BackColour = &H0
+Bold = False
+Italic = False
+Underline = False
+StrikeOut = False
+ScaleX = 100
+ScaleY = 100
+Spacing = 0
+Angle = 0
+BorderStyle = 1
+Outline = 1
+Shadow = 0
+Alignment = 2
+MarginL = 10
+MarginR = 10
+MarginV = 150
+Encoding = 1
