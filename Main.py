@@ -51,7 +51,7 @@ def getSettingsFileClass(programDirectory: str, settingsFileName: str) -> object
                     settingsList[11].split(" = ")[1],
                     settingsList[12].split(" = ")[1],
                     settingsList[13].split(" = ")[1],
-                    settingsList[17].split(" = ")[1],
+                    settingsList[14].split(" = ")[1],
                     settingsList[18].split(" = ")[1],
                     settingsList[19].split(" = ")[1],
                     settingsList[20].split(" = ")[1],
@@ -72,8 +72,9 @@ def getSettingsFileClass(programDirectory: str, settingsFileName: str) -> object
                     settingsList[35].split(" = ")[1],
                     settingsList[36].split(" = ")[1],
                     settingsList[37].split(" = ")[1],
+                    settingsList[38].split(" = ")[1],
                     settingsList[39].split(" = ")[1],
-                    settingsList[39].split(" = ")[1]
+                    settingsList[40].split(" = ")[1]
                     )
     return settings
 
@@ -86,7 +87,19 @@ def getScripFileClass(programDirectory: str, ScriptFileName: str) -> object:
     script.setScriptFileText(script.scriptFile.read())
     script.scriptFile.close()
     return script
-    
+def downloadBackgroudVidoes(videoBackgroundLinksFileName: str, videoBackgroundFolder: str) -> None:
+    with open(f"{programDirectory}/{videoBackgroundLinksFileName}") as inp:
+        videoBackgroundLinkList = inp.read().splitlines()
+    if len(videoBackgroundLinkList) <= 0:
+        sys.exit(f"No videos in \"{videoBackgroundLinkList}\" file")
+    for i in range(0, len(videoBackgroundLinkList)):
+        backgroundVideo = YouTube(videoBackgroundLinkList[i])
+        backgroundVideo.streams.first().download(
+                                                output_path=f"{programDirectory}/{videoBackgroundFolder}",
+                                                filename=f"backgroundVideo#{i + 1}"
+                                                )
+        del videoBackgroundLinkList[i]
+    print("complete")
 def loopAllModels(language: str, outputAudioName: str) -> None:
     for i in modelList:
         if i.find(language) == 11:
@@ -212,6 +225,7 @@ if __name__ == "__main__":
     scriptFileList = os.listdir(f"{programDirectory}/{settings.scriptsFolderName}")
     script = getScripFileClass(programDirectory, scriptFileList[0])
     del scriptFileList[scriptFileList.index(scriptFileList[0])]
+    downloadBackgroudVidoes(settings.videoBackgroundLinksFileName, settings.videoBackgroundFolder)
     if settings.loopAllModels:
         loopAllModels(settings.language, settings.outputAudioName)
         loadingClass.endLoadingAnimation()

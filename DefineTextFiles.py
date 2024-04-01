@@ -23,6 +23,7 @@ class settingsFile:
                 subtitleOutputFileName: str,
                 outputVideoName: str,
                 videoBackgroundFolder: str,
+                videoBackgroundLinksFileName : str,
                 loopAllModels: bool,
                 name: str,
                 fontName: str,
@@ -58,6 +59,7 @@ class settingsFile:
         self.subtitleOutputFileName = subtitleOutputFileName
         self.outputVideoName = outputVideoName
         self.videoBackgroundFolder = videoBackgroundFolder
+        self.videoBackgroundLinksFileName = videoBackgroundLinksFileName
         if loopAllModels.upper() == "TRUE":
             self.loopAllModels = True
         else:
@@ -115,8 +117,13 @@ class settingsFile:
         self.outputVideoName = outputVideoName
     def setVideoBackgroundFolder(self, videoBackgroundFolder: str) -> None:
         self.videoBackgroundFolder = videoBackgroundFolder
+    def setVideoBackgroundLinksFileName(self, videoBackgroundLinksFileName: str) -> None:
+        self.videoBackgroundLinksFileName = videoBackgroundLinksFileName
     def setLoopAllModels(self, loopAllModels: bool) -> None:
-        self.loopAllModels = loopAllModels
+        if loopAllModels.upper() == "TRUE":
+            self.loopAllModels = True
+        else:
+            self.loopAllModels = False
     def setName(self, name: str) -> None:
         self.name = name
     def setFontName(self, fontName: str) -> None:
