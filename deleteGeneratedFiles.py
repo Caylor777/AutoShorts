@@ -46,8 +46,17 @@ class deleteGeneratedFiles:
     def deleteGeneratedFiles(self) -> None:
         try:
             os.remove(f"{self.programDirectory}/{self.settings.outputAudioName}")
+        except:
+            pass
+        try:
             os.remove(f"{self.programDirectory}/sub-titles.{self.settings.language}.srt")
+        except:
+            pass
+        try:
             os.remove(f"{self.programDirectory}/sub-titles.{self.settings.language}.ass")
+        except:
+            pass
+        try:
             os.remove(f"{self.programDirectory}/{self.settings.outputVideoName}")
         except:
             pass

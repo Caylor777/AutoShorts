@@ -11,7 +11,7 @@ outputAudioName = outputAudio.mp3
 subtitleOutputFileName = titles
 outputVideoName = videoOutput.mp4
 videoBackground = backgroundVideos
-videoBackgroundLinksFileName = backgroundList.txt
+videoBackgroundLinksFileName = backgroundVideoList.txt
 loopAllModels = False
 ---------------------
   Subtitle Settings

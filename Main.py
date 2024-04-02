@@ -93,11 +93,16 @@ def downloadBackgroudVidoes(videoBackgroundLinksFileName: str, videoBackgroundFo
     if len(videoBackgroundLinkList) <= 0:
         sys.exit(f"No videos in \"{videoBackgroundLinkList}\" file")
     for i in range(0, len(videoBackgroundLinkList)):
-        backgroundVideo = YouTube(videoBackgroundLinkList[i])
-        backgroundVideo.streams.first().download(
-                                                output_path=f"{programDirectory}/{videoBackgroundFolder}",
-                                                filename=f"backgroundVideo#{i + 1}"
-                                                )
+        try:
+            yt = YouTube("https://www.youtube.com/watch?v=bXlQ3Mw4uGc")
+            mp4_streams = yt.streams.filter(file_extension='mp4').all()
+        except:
+            sys.exit("Connection Error")
+        backgroundVideo = mp4_streams[-1]
+        try:
+            backgroundVideo.download(output_path=f"{programDirectory}/{videoBackgroundFolder}")
+        except:
+            sys.exit("Error saving video")
         del videoBackgroundLinkList[i]
     print("complete")
 def loopAllModels(language: str, outputAudioName: str) -> None:
