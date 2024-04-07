@@ -55,11 +55,11 @@ class settingsFile:
         self._outputVideoName = outputVideoName
         self._videoBackgroundFolder = videoBackgroundFolder
         self._videoBackgroundLinksFileName = videoBackgroundLinksFileName
-        if downloadVideosInLinksFile.upper() == "TRUE" or downloadVideosInLinksFile == True:
+        if downloadVideosInLinksFile.upper() == "TRUE":
             self._downloadVideosInLinksFile = True
         else:
             self._downloadVideosInLinksFile = False
-        if loopAllModels.upper() == "TRUE" or loopAllModels == True:
+        if loopAllModels.upper() == "TRUE":
             self._loopAllModels = True
         else:
             self._loopAllModels = False
@@ -70,22 +70,22 @@ class settingsFile:
         self._secondaryColour = secondaryColour
         self._outlineColour = outlineColour
         self._backColour = backColour
-        if bold.upper() == "TRUE" or bold == True:
+        if bold.upper() == "TRUE":
             self._bold = 1
         else:
             self._bold = 0
-        if italic.upper() == "TRUE" or italic == True:
+        if italic.upper() == "TRUE":
             self._italic = 1
         else:
             self._italic = 0
-        if underLine.upper() == "TRUE" or underLine == True:
+        if underLine.upper() == "True":
             self._underLine = 1
         else:
             self._underLine = 0
-        if strikeOut.upper() == "TRUE" or underLine == True:
+        if strikeOut.upper() == "TRUE":
             self._strikeOut = 1
         else:
-            self._strikeOut = 0
+            self.strikeOut = 0
         self._scaleX = scaleX
         self._scaleY = scaleY
         self._spacing = spacing
@@ -98,62 +98,93 @@ class settingsFile:
         self._marginR = marginR
         self._marginV = marginV
         self._encoding = encoding
+
     @property
     def downloadVideosInLinksFile(self):
         return self._downloadVideosInLinksFile
     @downloadVideosInLinksFile.setter
-    def downloadVideosInLinksFile(self, downloadVideosInLinksFile: bool):
-        if downloadVideosInLinksFile.upper() == "TRUE" or downloadVideosInLinksFile == True:
-            self.downloadVideosInLinksFile = True
-        else:
-            self.downloadVideosInLinksFile = False
-
+    def downloadVideosInLinksFile(self, downloadVideosInLinksFile):
+        try:
+            if downloadVideosInLinksFile.upper() == "TRUE":
+                self._downloadVideosInLinksFile = True
+            else:
+                self._downloadVideosInLinksFile = False
+        except:
+            self._downloadVideosInLinksFile = bool(downloadVideosInLinksFile)
+    
     @property
     def loopAllModels(self):
         return self._loopAllModels
     @loopAllModels.setter
-    def loopAllModels(self, loopAllModels: bool) -> None:
-        if loopAllModels.upper() == "TRUE" or loopAllModels == True:
-            self._loopAllModels = True
-        else:
-            self._loopAllModels = False
+    def loopAllModels(self, loopAllModels):
+        try:
+            if loopAllModels.upper() == "TRUE":
+                self._loopAllModels = True
+            else:
+                self._loopAllModels = False
+        except:
+            self._loopAllModels = bool(loopAllModels)
 
     @property
     def bold(self):
         return self._bold
     @bold.setter
-    def bold(self, bold: bool) -> None:
-        if bold.upper() == "TRUE" or bold == True:
-            self._bold = 1
-        else:
-            self._bold = 0
+    def bold(self, bold):
+        try:
+            if bold.upper() == "TRUE":
+                self._bold = 1
+            else:
+                self._bold = 0
+        except:
+            if bold:
+                self._bold = 1
+            else:
+                self._bold = 0
 
     @property
     def italic(self):
         return self._italic
     @italic.setter
-    def italic(self, italic: bool) -> None:
-        if italic.upper() == "TRUE" or italic == True:
-            self._italic = 1
-        else:
-            self._italic = 0
+    def italic(self, italic):
+        try:
+            if italic.upper() == "TRUE":
+                self._italic = 1
+            else:
+                self._italic = 0
+        except:
+            if italic:
+                self._italic = 1
+            else:
+                self._italic = 0
 
     @property
     def underLine(self):
         return self._underLine
     @underLine.setter
-    def underLine(self, underLine: bool) -> None:
-        if underLine.upper() == "TRUE" or underLine == True:
-            self._underLine = 1
-        else:
-            self._underLine = 0
+    def underLine(self, underLine):
+        try:
+            if underLine.upper() == "TRUE":
+                self._underLine = 1
+            else:
+                self._underLine = 0
+        except:
+            if underLine:
+                self._underLine = 1
+            else:
+                self._underLine = 0
     
     @property
     def strikeOut(self):
         return self._strikeOut
     @strikeOut.setter
-    def strikeOut(self, strikeOut: bool) -> None:
-        if strikeOut.upper() == "TRUE" or strikeOut == True:
-            self._strikeOut = 1
-        else:
-            self._strikeOut = 0
+    def strikeOut(self, strikeOut):
+        try:
+            if strikeOut.upper() == "TRUE":
+                self._strikeOut = 1
+            else:
+                self._strikeOut = 0
+        except:
+            if strikeOut:
+                self._strikeOut = 1
+            else:
+                self._strikeOut = 0
