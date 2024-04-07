@@ -52,7 +52,7 @@ def getSettingsFileClass(programDirectory: str, settingsFileName: str) -> object
                     settingsList[12].split(" = ")[1],
                     settingsList[13].split(" = ")[1],
                     settingsList[14].split(" = ")[1],
-                    settingsList[18].split(" = ")[1],
+                    settingsList[15].split(" = ")[1],
                     settingsList[19].split(" = ")[1],
                     settingsList[20].split(" = ")[1],
                     settingsList[21].split(" = ")[1],
@@ -74,7 +74,8 @@ def getSettingsFileClass(programDirectory: str, settingsFileName: str) -> object
                     settingsList[37].split(" = ")[1],
                     settingsList[38].split(" = ")[1],
                     settingsList[39].split(" = ")[1],
-                    settingsList[40].split(" = ")[1]
+                    settingsList[40].split(" = ")[1],
+                    settingsList[41].split(" = ")[1]
                     )
     return settings
 
@@ -227,7 +228,8 @@ if __name__ == "__main__":
     scriptFileList = os.listdir(f"{programDirectory}/{settings.scriptsFolderName}")
     script = getScripFileClass(programDirectory, scriptFileList[0])
     del scriptFileList[scriptFileList.index(scriptFileList[0])]
-    downloadBackgroudVidoes(settings.videoBackgroundLinksFileName, settings.videoBackgroundFolder)
+    if settings.downloadVideosInLinksFile:
+        downloadBackgroudVidoes(settings.videoBackgroundLinksFileName, settings.videoBackgroundFolder)
     if settings.loopAllModels:
         loopAllModels(settings.language, settings.outputAudioName)
         loadingClass.endLoadingAnimation()

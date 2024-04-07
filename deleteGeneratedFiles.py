@@ -19,7 +19,7 @@ class deleteGeneratedFiles:
                                     self.settingsList[12].split(" = ")[1],
                                     self.settingsList[13].split(" = ")[1],
                                     self.settingsList[14].split(" = ")[1],
-                                    self.settingsList[18].split(" = ")[1],
+                                    self.settingsList[15].split(" = ")[1],
                                     self.settingsList[19].split(" = ")[1],
                                     self.settingsList[20].split(" = ")[1],
                                     self.settingsList[21].split(" = ")[1],
@@ -41,7 +41,8 @@ class deleteGeneratedFiles:
                                     self.settingsList[37].split(" = ")[1],
                                     self.settingsList[38].split(" = ")[1],
                                     self.settingsList[39].split(" = ")[1],
-                                    self.settingsList[40].split(" = ")[1]
+                                    self.settingsList[40].split(" = ")[1],
+                                    self.settingsList[41].split(" = ")[1]
                                    )
     def deleteGeneratedFiles(self) -> None:
         try:

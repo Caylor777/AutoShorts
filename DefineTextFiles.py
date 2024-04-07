@@ -3,12 +3,6 @@ class scriptFile:
         self.scriptFile = scriptFile
         self.scriptFileDirectory = scriptFileDirectory
         self.scriptFileText = scriptFileText
-    def setScriptFile(self, scriptFile: object) -> None:
-        self.scriptFile = scriptFile
-    def setScriptFileDirectory(self, scriptFileDirectory: str) -> None:
-        self.scriptFileDirectory = scriptFileDirectory
-    def setScriptFileText(self, scriptFileText: str) -> None:
-        self.scriptFileText = scriptFileText
 
 class settingsFile:
     def __init__(
@@ -24,6 +18,7 @@ class settingsFile:
                 outputVideoName: str,
                 videoBackgroundFolder: str,
                 videoBackgroundLinksFileName : str,
+                downloadVideosInLinksFile: bool,
                 loopAllModels: bool,
                 name: str,
                 fontName: str,
@@ -49,136 +44,116 @@ class settingsFile:
                 marginV: int, 
                 encoding: int
                 ) -> None:
-        self.scriptsFolderName = scriptsFolderName
-        self.ttsModel = ttsModel
-        self.language = language
-        self.emotion = emotion
-        self.speed = speed
-        self.whisperModel = whisperModel
-        self.outputAudioName = outputAudioName
-        self.subtitleOutputFileName = subtitleOutputFileName
-        self.outputVideoName = outputVideoName
-        self.videoBackgroundFolder = videoBackgroundFolder
-        self.videoBackgroundLinksFileName = videoBackgroundLinksFileName
-        if loopAllModels.upper() == "TRUE":
-            self.loopAllModels = True
+        self._scriptsFolderName = scriptsFolderName
+        self._ttsModel = ttsModel
+        self._language = language
+        self._emotion = emotion
+        self._speed = speed
+        self._whisperModel = whisperModel
+        self._outputAudioName = outputAudioName
+        self._subtitleOutputFileName = subtitleOutputFileName
+        self._outputVideoName = outputVideoName
+        self._videoBackgroundFolder = videoBackgroundFolder
+        self._videoBackgroundLinksFileName = videoBackgroundLinksFileName
+        if downloadVideosInLinksFile.upper() == "TRUE" or downloadVideosInLinksFile == True:
+            self._downloadVideosInLinksFile = True
         else:
-            self.loopAllModels = False
-        self.name = name
-        self.fontName = fontName
-        self.fontSize = fontSize
-        self.primaryColour = primaryColour
-        self.secondaryColour = secondaryColour
-        self.outlineColour = outlineColour
-        self.backColour = backColour
-        if bold.upper() == "TRUE":
-            self.bold = 1
+            self._downloadVideosInLinksFile = False
+        if loopAllModels.upper() == "TRUE" or loopAllModels == True:
+            self._loopAllModels = True
         else:
-            self.bold = 0
-        if italic.upper() == "TRUE":
-            self.italic = 1
+            self._loopAllModels = False
+        self._name = name
+        self._fontName = fontName
+        self._fontSize = fontSize
+        self._primaryColour = primaryColour
+        self._secondaryColour = secondaryColour
+        self._outlineColour = outlineColour
+        self._backColour = backColour
+        if bold.upper() == "TRUE" or bold == True:
+            self._bold = 1
         else:
-            self.italic = 0
-        if underLine.upper() == "TRUE":
-            self.underLine = 1
+            self._bold = 0
+        if italic.upper() == "TRUE" or italic == True:
+            self._italic = 1
         else:
-            self.underLine = 0
-        if strikeOut.upper() == "TRUE":
-            self.strikeOut = 1
+            self._italic = 0
+        if underLine.upper() == "TRUE" or underLine == True:
+            self._underLine = 1
         else:
-            self.strikeOut = 0
-        self.scaleX = scaleX
-        self.scaleY = scaleY
-        self.spacing = spacing
-        self.angle = angle
-        self.borderStyle = borderStyle
-        self.outline = outline
-        self.shadow = shadow
-        self.alignment = alignment
-        self.marginL = marginL
-        self.marginR = marginR
-        self.marginV = marginV
-        self.encoding = encoding
-    def setScriptsFolderName(self, scriptsFolderName: str) -> None:
-        self.scriptsFolderName = scriptsFolderName
-    def set_ttsModel(self, ttsModel: str) -> None:
-        self.ttsModel = ttsModel
-    def setLanguage(self, language: str) -> None:
-        self.language = language
-    def setSpeed(self, speed: float) -> None:
-        self.speed = speed
-    def setWhisperModel(self, whisperModel: str) -> None:
-        self.whisperModel = whisperModel
-    def setOutputAudioName(self, outputAudioName: str) -> None:
-        self.outputAudioName = outputAudioName
-    def setSubtitleOutputFileName(self, subtitleOutputFileName: str) -> None:
-        self.subtitleOutputFileName = subtitleOutputFileName
-    def setOutputVideoName(self, outputVideoName: str) -> None:
-        self.outputVideoName = outputVideoName
-    def setVideoBackgroundFolder(self, videoBackgroundFolder: str) -> None:
-        self.videoBackgroundFolder = videoBackgroundFolder
-    def setVideoBackgroundLinksFileName(self, videoBackgroundLinksFileName: str) -> None:
-        self.videoBackgroundLinksFileName = videoBackgroundLinksFileName
-    def setLoopAllModels(self, loopAllModels: bool) -> None:
-        if loopAllModels.upper() == "TRUE":
-            self.loopAllModels = True
+            self._underLine = 0
+        if strikeOut.upper() == "TRUE" or underLine == True:
+            self._strikeOut = 1
         else:
-            self.loopAllModels = False
-    def setName(self, name: str) -> None:
-        self.name = name
-    def setFontName(self, fontName: str) -> None:
-        self.fontName = fontName
-    def setFontSize(self, fontSize: int) -> None:
-        self.fontSize = fontSize
-    def setPrimaryColour(self, primaryColour: str) -> None:
-        self.primaryColour = primaryColour
-    def setSecondaryColour(self, secondaryColour: str) -> None:
-        self.secondaryColour = secondaryColour
-    def setOutlineColour(self, outlineColour: str) -> None:
-        self.outlineColour = outlineColour
-    def setBackColour(self, backColour: str) -> None:
-        self.backColour = backColour
-    def setBold(self, bold: bool) -> None:
-        if bold.upper() == "TRUE":
-            self.bold = 1
+            self._strikeOut = 0
+        self._scaleX = scaleX
+        self._scaleY = scaleY
+        self._spacing = spacing
+        self._angle = angle
+        self._borderStyle = borderStyle
+        self._outline = outline
+        self._shadow = shadow
+        self._alignment = alignment
+        self._marginL = marginL
+        self._marginR = marginR
+        self._marginV = marginV
+        self._encoding = encoding
+    @property
+    def downloadVideosInLinksFile(self):
+        return self._downloadVideosInLinksFile
+    @downloadVideosInLinksFile.setter
+    def downloadVideosInLinksFile(self, downloadVideosInLinksFile: bool):
+        if downloadVideosInLinksFile.upper() == "TRUE" or downloadVideosInLinksFile == True:
+            self.downloadVideosInLinksFile = True
         else:
-            self.bold = 0
-    def setItalic(self, italic: bool) -> None:
-        if italic.upper() == "TRUE":
-            self.italic = 1
+            self.downloadVideosInLinksFile = False
+
+    @property
+    def loopAllModels(self):
+        return self._loopAllModels
+    @loopAllModels.setter
+    def loopAllModels(self, loopAllModels: bool) -> None:
+        if loopAllModels.upper() == "TRUE" or loopAllModels == True:
+            self._loopAllModels = True
         else:
-            self.italic = 0
-    def setUnderLine(self, underLine: bool) -> None:
-        if underLine.upper() == "TRUE":
-            self.underLine = 1
+            self._loopAllModels = False
+
+    @property
+    def bold(self):
+        return self._bold
+    @bold.setter
+    def bold(self, bold: bool) -> None:
+        if bold.upper() == "TRUE" or bold == True:
+            self._bold = 1
         else:
-            self.underLine = 0
-    def setstrikeOut(self, strikeOut: bool) -> None:
-        if strikeOut.upper() == "TRUE":
-            self.strikeOut = 1
+            self._bold = 0
+
+    @property
+    def italic(self):
+        return self._italic
+    @italic.setter
+    def italic(self, italic: bool) -> None:
+        if italic.upper() == "TRUE" or italic == True:
+            self._italic = 1
         else:
-            self.strikeOut = 0
-    def setScaleX(self, scaleX: int) -> None:
-        self.scaleX = scaleX
-    def setScaleY(self, scaleY: int) -> None:
-        self.scaleY = scaleY
-    def setSpacing(self, spacing: int) -> None:
-        self.spacing = spacing
-    def setAngle(self, angle: int) -> None:
-        self.angle = angle
-    def setBorderStyle(self, borderStyle: int) -> None:
-        self.borderStyle = borderStyle
-    def setOutline(self, outline: int) -> None:
-        self.outline = outline
-    def setShadow(self, shadow: int) -> None:
-        self.shadow = shadow
-    def setAlignment(self, alignment: int) -> None:
-        self.alignment = alignment
-    def setMarginL(self, marginL: int) -> None:
-        self.marginL = marginL
-    def setMarginR(self, marginR: int) -> None:
-        self.marginR = marginR
-    def setMarginV(self, marginV: int) -> None:
-        self.marginV = marginV
-    def setEncoding(self, encoding: int) -> None:
-        self.encoding = encoding
+            self._italic = 0
+
+    @property
+    def underLine(self):
+        return self._underLine
+    @underLine.setter
+    def underLine(self, underLine: bool) -> None:
+        if underLine.upper() == "TRUE" or underLine == True:
+            self._underLine = 1
+        else:
+            self._underLine = 0
+    
+    @property
+    def strikeOut(self):
+        return self._strikeOut
+    @strikeOut.setter
+    def strikeOut(self, strikeOut: bool) -> None:
+        if strikeOut.upper() == "TRUE" or strikeOut == True:
+            self._strikeOut = 1
+        else:
+            self._strikeOut = 0
