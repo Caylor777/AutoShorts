@@ -10,7 +10,9 @@ whisperModel = small
 outputAudioName = outputAudio.mp3
 subtitleOutputFileName = titles
 outputVideoName = videoOutput.mp4
-videoBackground = backgroundVideos
+videoBackgroundFolderName = backgroundVideos
+videoBackgroundLinksFileName = backgroundVideoList.txt
+downloadVideosInLinksFile = True
 loopAllModels = False
 ---------------------
   Subtitle Settings

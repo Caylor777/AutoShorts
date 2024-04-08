@@ -18,8 +18,8 @@ class deleteGeneratedFiles:
                                     self.settingsList[11].split(" = ")[1],
                                     self.settingsList[12].split(" = ")[1],
                                     self.settingsList[13].split(" = ")[1],
-                                    self.settingsList[17].split(" = ")[1],
-                                    self.settingsList[18].split(" = ")[1],
+                                    self.settingsList[14].split(" = ")[1],
+                                    self.settingsList[15].split(" = ")[1],
                                     self.settingsList[19].split(" = ")[1],
                                     self.settingsList[20].split(" = ")[1],
                                     self.settingsList[21].split(" = ")[1],
@@ -39,15 +39,26 @@ class deleteGeneratedFiles:
                                     self.settingsList[35].split(" = ")[1],
                                     self.settingsList[36].split(" = ")[1],
                                     self.settingsList[37].split(" = ")[1],
+                                    self.settingsList[38].split(" = ")[1],
                                     self.settingsList[39].split(" = ")[1],
-                                    self.settingsList[39].split(" = ")[1]
+                                    self.settingsList[40].split(" = ")[1],
+                                    self.settingsList[41].split(" = ")[1]
                                    )
     def deleteGeneratedFiles(self) -> None:
         try:
-            os.remove(f"{self.programDirectory}/{self.settings.outputAudioName}")
-            os.remove(f"{self.programDirectory}/sub-titles.{self.settings.language}.srt")
-            os.remove(f"{self.programDirectory}/sub-titles.{self.settings.language}.ass")
-            os.remove(f"{self.programDirectory}/{self.settings.outputVideoName}")
+            os.remove(f"{self.programDirectory}/{self.settings._outputAudioName}")
+        except:
+            pass
+        try:
+            os.remove(f"{self.programDirectory}/sub-titles.{self.settings._language}.srt")
+        except:
+            pass
+        try:
+            os.remove(f"{self.programDirectory}/sub-titles.{self.settings._language}.ass")
+        except:
+            pass
+        try:
+            os.remove(f"{self.programDirectory}/{self.settings._outputVideoName}")
         except:
             pass
         if self.tempFiles == []:
