@@ -2,12 +2,12 @@
 Convert any script(s) to a TTS video with subtitles
 
 ## Installation
-Works in python 3.11.5<br>
-clone or download zip of the repository
-Add a folder named "backgroundVideos"
-Install before using:
-"https://visualstudio.microsoft.com/visual-cpp-build-tools/" and download C++ tools
-"https://github.com/espeak-ng/espeak-ng/releases/tag/1.51" and download the .msi<br>
+Works in python 3.11.5  
+clone or download zip of the repository  
+Add a folder named "backgroundVideos"  
+Install before using:  
+"https://visualstudio.microsoft.com/visual-cpp-build-tools/" and download C++ tools  
+"https://github.com/espeak-ng/espeak-ng/releases/tag/1.51" and download the .msi  
 
 ## Usage
 How to Use:<br>
