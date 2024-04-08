@@ -1,9 +1,24 @@
+# Auto Shorts
+Convert any script(S) to a TTS video with subtitles
 
-If the "installer.py" file fails to install or the main is missing dependencies install:
-    "https://visualstudio.microsoft.com/visual-cpp-build-tools/" and download C++ tools
-    "https://github.com/espeak-ng/espeak-ng/releases/tag/1.51: and download the .msi
-pip packages: "os.path2", "TTS", "faster_whisper", "ffmpeg-python"
+## Installation
+Works in python 3.11.5
+clone or download zip of the repository
+Install before using:
+"https://visualstudio.microsoft.com/visual-cpp-build-tools/" and download C++ tools
+"https://github.com/espeak-ng/espeak-ng/releases/tag/1.51" and download the .msi
 
+## Usage
+How to Use:
+    Use "settings.txt" to config the program (Note: Must keep space after "=")
+    Put ".txt" Files in the "Scripts" Folder and the program will make a new video per script in the folder
+    Youtube(only) links in the "backgroundVideoList.txt" file will downloaded if the "downloadVideosInLinksFile" setting is "True"
+    "downloadVideosInLinksFile = True" will prevent the main program from running and only download the videos
+    (Note: "downloadVideosInLinksFile" is for easily downloading background videos)
+How it works:
+    For evey script in "Scripts" folder a video is made
+    Videos in the "backgroundVideos" folder will be randomly chosen for each script
+    Run "Main.py" to use program
 All TTS Voices:
     1: tts_models/multilingual/multi-dataset/xtts_v2
     2: tts_models/multilingual/multi-dataset/xtts_v1.1
@@ -73,3 +88,17 @@ All TTS Voices:
     68: tts_models/bn/custom/vits-male
     69: tts_models/bn/custom/vits-female
     70: tts_models/be/common-voice/glow-tts
+
+## Dependencies
+"https://visualstudio.microsoft.com/visual-cpp-build-tools/"
+"https://github.com/espeak-ng/espeak-ng/releases/tag/1.51"
+pip packages: "pytube", "TTS", "faster_whisper", "ffmpeg-python" or requirements.txt
+
+##Contributing
+https://github.com/Caylor777
+
+## License
+MIT License
+
+## Contact
+https://github.com/Caylor777/AutoShorts

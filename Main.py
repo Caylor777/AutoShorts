@@ -104,11 +104,11 @@ def downloadBackgroudVidoes(videoBackgroundLinksFileName: str, videoBackgroundFo
                 sys.exit("ERROR: Failed to save video")
             
 def loopAllModels(language: str, outputAudioName: str) -> None:
-    for i in modelList:
-        if i.find(language) == 11:
-            print(f"Writing TTS Model {i}")
-            createAudioFile(i, "My name is, " + i.replace("/", " ").replace("_", " ").replace("-", " "))
-            print(f"Current TTS Model: {i}")
+    for model in modelList:
+        if model.find(language) == 11:
+            print(f"Writing TTS Model {model}")
+            createAudioFile(model, "My name is, " + model.replace("/", " ").replace("_", " ").replace("-", " "))
+            print(f"Current TTS Model: {model}")
             audioFile = simpleaudio.WaveObject.from_wave_file(f"{programDirectory}/{outputAudioName}")
             audioPlay = audioFile.play()
             audioPlay.wait_done()
