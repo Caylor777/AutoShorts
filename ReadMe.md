@@ -1,5 +1,5 @@
 # Auto Shorts
-Convert any script(S) to a TTS video with subtitles
+Convert any script(s) to a TTS video with subtitles
 
 ## Installation
 Works in python 3.11.5
