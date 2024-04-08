@@ -85,7 +85,7 @@ def getScripFileClass(programDirectory: str, scriptsFolderName:str, ScriptFileNa
                         f"{programDirectory}/{scriptsFolderName}/{ScriptFileName}",
                         "N/A"
                        )
-    script.setScriptFileText = script.scriptFile.read()
+    script.scriptFileText = script.scriptFile.read()
     script.scriptFile.close()
     return script
 def downloadBackgroudVidoes(videoBackgroundLinksFileName: str, videoBackgroundFolder: str) -> None:
@@ -154,7 +154,7 @@ def createSubtitles(whisperModel: str, outputAudioName: str, subtitleOutputFileN
     )
     with open(f"{programDirectory}/sub-titles.{language}.ass") as inp:
         subtitleFileContent = inp.read().splitlines()
-    subtitleFileContent[10] = f"Style: {str(settings.name)},{str(settings.fontName)},{str(settings.fontSize)},{str(settings.primaryColour)},{str(settings.secondaryColour)},{str(settings.outlineColour)},{str(settings.backColour)},{str(settings.bold)},{str(settings.italic)},{str(settings.underLine)},{str(settings.strikeOut)},{str(settings.scaleX)},{str(settings.scaleY)},{str(settings.spacing)},{str(settings.angle)},{str(settings.borderStyle)},{str(settings.outline)},{str(settings.shadow)},{str(settings.alignment)},{str(settings.marginL)},{str(settings.marginR)},{str(settings.marginV)},{str(settings.encoding)}"
+    subtitleFileContent[10] = f"Style: {str(settings._name)},{str(settings._fontName)},{str(settings._fontSize)},{str(settings._primaryColour)},{str(settings._secondaryColour)},{str(settings._outlineColour)},{str(settings._backColour)},{str(settings._bold)},{str(settings._italic)},{str(settings._underLine)},{str(settings._strikeOut)},{str(settings._scaleX)},{str(settings._scaleY)},{str(settings._spacing)},{str(settings._angle)},{str(settings._borderStyle)},{str(settings._outline)},{str(settings._shadow)},{str(settings._alignment)},{str(settings._marginL)},{str(settings._marginR)},{str(settings._marginV)},{str(settings._encoding)}"
     test = "\n".join(subtitleFileContent)
     f = open(f"{programDirectory}/sub-titles.{language}.ass", "w")
     f.write(test)
@@ -226,23 +226,20 @@ if __name__ == "__main__":
     loadingClass.startLoadingAnimation()
     settings = getSettingsFileClass(programDirectory, "settings.txt")
     scriptFileList = os.listdir(f"{programDirectory}/{settings._scriptsFolderName}")
-    script = getScripFileClass(programDirectory, settings._scriptsFolderName, scriptFileList[0])
-    del scriptFileList[scriptFileList.index(scriptFileList[0])]
     if settings._downloadVideosInLinksFile:
         downloadBackgroudVidoes(settings._videoBackgroundLinksFileName, settings._videoBackgroundFolder)
     if settings._loopAllModels:
         loopAllModels(settings._language, settings._outputAudioName)
         loadingClass.endLoadingAnimation()
     else:
-        for i in range(0, len(os.listdir(f"{programDirectory}/{settings._scriptsFolderName}"))):
+        for script in scriptFileList:
+            script = getScripFileClass(programDirectory, settings._scriptsFolderName, script)
             deleteGeneratedFilesClass.deleteGeneratedFiles()
             createAudioFile(settings._ttsModel, script.scriptFileText, settings._language, settings._speed, settings._outputAudioName)
             createSubtitles(settings._whisperModel, settings._outputAudioName, settings._subtitleOutputFileName, settings._language)
             makeBackgroundVideoSegment(settings._videoBackgroundFolder, settings._outputAudioName)
             applySubtitlesToVideo(settings._language, settings._outputVideoName)
             applyAudioToVideo(settings._outputVideoName, settings._outputAudioName)
-            script = getScripFileClass(programDirectory, scriptFileList[0])
-            del scriptFileList[scriptFileList.index(scriptFileList[0])]
         loadingClass.endLoadingAnimation()
 else:
     import sys
