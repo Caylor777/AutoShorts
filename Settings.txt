@@ -12,7 +12,7 @@ subtitleOutputFileName = titles
 outputVideoName = videoOutput.mp4
 videoBackgroundFolderName = backgroundVideos
 videoBackgroundLinksFileName = backgroundVideoList.txt
-downloadVideosInLinksFile = True
+downloadVideosInLinksFile = False
 loopAllModels = False
 ---------------------
   Subtitle Settings

@@ -1,10 +1,10 @@
 def startUpScreen():
-    print("          ___        _          _   _       _             ___  ___      _                   ")
-    print("         / _ \      | |        | | | (_)   | |            |  \/  |     | |                  ")
-    print("        / /_\ \_   _| |_ ___   | | | |_  __| | ___  ___   | .  . | __ _| | _____ _ __       ")
-    print("        |  _  | | | | __/ _ \  | | | | |/ _` |/ _ \/ _ \  | |\/| |/ _` | |/ / _ \ '__|      ")
-    print("        | | | | |_| | || (_) | \ \_/ / | (_| |  __/ (_) | | |  | | (_| |   <  __/ |         ")
-    print("        \_| |_/\__,_|\__\___/   \___/|_|\__,_|\___|\___/  \_|  |_/\__,_|_|\_\___|_|         ")
+    print("                     ___        _          _____ _                _                         ")
+    print("                    / _ \      | |        /  ___| |              | |                        ")
+    print("                   / /_\ \_   _| |_ ___   \ `--.| |__   ___  _ __| |_ ___                   ")
+    print("                   |  _  | | | | __/ _ \   `--. \ '_ \ / _ \| '__| __/ __|                  ")
+    print("                   | | | | |_| | || (_) | /\__/ / | | | (_) | |  | |_\__ \                  ")
+    print("                   \_| |_/\__,_|\__\___/  \____/|_| |_|\___/|_|   \__|___/                  ")
     print("                        __________                                                          ")
     print("                       |          \                                         ____________    ")
     print("                       |           \_____                               ___/            \_  ")
@@ -26,6 +26,14 @@ def startUpScreen():
     print("     \_______            ____/                          \_________/                         ")
     print("             \__________/                                                                   ")
 
+def crashHandler():
+    loadingClass.clearDescription()
+    loadingClass.endLoadingAnimation()
+def exitHandler(exitCode: str):
+    loadingClass.clearDescription()
+    loadingClass.endLoadingAnimation()
+    sys.exit(exitCode)
+    
 def format_time(seconds):
     hours = math.floor(seconds / 3600)
     seconds %= 3600
@@ -88,21 +96,24 @@ def getScripFileClass(programDirectory: str, scriptsFolderName:str, ScriptFileNa
     script.scriptFileText = script.scriptFile.read()
     script.scriptFile.close()
     return script
+
 def downloadBackgroudVidoes(videoBackgroundLinksFileName: str, videoBackgroundFolder: str) -> None:
+    loadingClass.description = "Downloading requested video"
     with open(f"{programDirectory}/{videoBackgroundLinksFileName}") as inp:
         videoBackgroundLinkList = inp.read().splitlines()
     if len(videoBackgroundLinkList) <= 0:
-        sys.exit(f"No videos in \"{videoBackgroundLinkList}\" file")
+        exitHandler(f"No videos in \"{videoBackgroundLinkList}\" file")
     for videoLink in videoBackgroundLinkList:
         try:
-            YouTube(videoLink).streams.first().download(output_path=f"{programDirectory}/{videoBackgroundFolder}")
+            YouTube(videoLink).streams.get_highest_resolution().download(output_path=f"{programDirectory}/{videoBackgroundFolder}")
         except:
             print("Error saving video\nRetrying...")
             try:
-                YouTube(videoLink).streams.first().download(output_path=f"{programDirectory}/{videoBackgroundFolder}")
+                YouTube(videoLink).streams.get_highest_resolution().download(output_path=f"{programDirectory}/{videoBackgroundFolder}")
             except:
-                sys.exit("ERROR: Failed to save video")
-            
+                exitHandler("ERROR: Failed to save video")
+    exitHandler("Download Complete")
+
 def loopAllModels(language: str, outputAudioName: str) -> None:
     for model in modelList:
         if model.find(language) == 11:
@@ -114,10 +125,10 @@ def loopAllModels(language: str, outputAudioName: str) -> None:
             audioPlay.wait_done()
         else:
             pass
-    sys.exit("All TTS models Played")
+    exitHandler("All TTS models Played")
     
 def createAudioFile(model: str, scriptText: str, language: str, speed: int, outputAudioName: str) -> None:
-    logging.info(f"Writing file with \"{model}\" model")
+    print(f"Writing file with \"{model}\" model")
     tts = TTS(model)
     if model.find("tts_models/multilingual") == 0:
         tts.tts_to_file(text=scriptText, language=language, speed=speed, file_path=outputAudioName)
@@ -162,8 +173,9 @@ def createSubtitles(whisperModel: str, outputAudioName: str, subtitleOutputFileN
     
 def makeBackgroundVideoSegment(videoBackgroundFolder: str, outputAudioName: str) -> None:
     backgroundVideoList = os.listdir(f"{programDirectory}/{videoBackgroundFolder}")
+    backgroundVideoList.remove("ignoreMe")
     if len(backgroundVideoList) <= 0:
-        sys.exit(f"No videos in \"{videoBackgroundFolder}\" folder")
+        exitHandler(f"No videos in \"{videoBackgroundFolder}\" folder")
     elif len(backgroundVideoList) <= 1:
         videoBackground = backgroundVideoList[0]
     else:
@@ -179,26 +191,37 @@ def makeBackgroundVideoSegment(videoBackgroundFolder: str, outputAudioName: str)
     #get random time stamp
     timeAvailable = (durationVideo - durationAudio) - 1
     if timeAvailable < durationAudio:
-        sys.exit("Video background file not long enough")
+        exitHandler("Video background file not long enough")
     timeStamp = random.randrange(1, int(timeAvailable))
     timeStamp = timeStamp - 1
     timeStamp = int(timeStamp)
     (
     ffmpeg
     .input(f"{programDirectory}/{videoBackgroundFolder}/{videoBackground}", ss=timeStamp, t=durationAudio)
-    .output('temp.mp4')
+    .output('TEMP.mp4')
     .run(overwrite_output = True)
     )
+    
+def changeVideoResolution(aspectRatio: str, outputVideoName: str):
+    aspectRatio = aspectRatio.replace(":", "/")
+    (
+        ffmpeg
+        .input(f"{programDirectory}/TEMP.mp4")
+        .filter("crop", f"{aspectRatio}*ih", "ih")
+        .output(outputVideoName)
+        .run(overwrite_output = True)
+    )
+    os.remove(f"{programDirectory}/TEMP.mp4")
     
 def applySubtitlesToVideo(language: str, outputVideoName: str) -> None:
     (
     ffmpeg
-    .input("temp.mp4")
+    .input(f"{programDirectory}/{outputVideoName}")
     .filter("ass", f"sub-titles.{language}.ass")
     .output(f"{programDirectory}/TEMP{outputVideoName}")
     .run(overwrite_output = True)
     )
-    os.remove(f"{programDirectory}/temp.mp4")
+    os.remove(f"{programDirectory}/{outputVideoName}")
     
 def applyAudioToVideo(outputVideoName: str, outputAudioName: str) -> None:
     (
@@ -209,7 +232,7 @@ def applyAudioToVideo(outputVideoName: str, outputAudioName: str) -> None:
         .run(overwrite_output=True)
     )
     os.remove(f"{programDirectory}/TEMP{outputVideoName}")
-
+    
 if __name__ == "__main__":
     startUpScreen()
     from TTS.api import TTS
@@ -218,9 +241,12 @@ if __name__ == "__main__":
     from loadingFunction import loadingFunction
     from faster_whisper import WhisperModel
     from pytube import YouTube
-    import sys, os, logging, simpleaudio, math, ffmpeg, random
+    import moviepy.editor as editor
+    import moviepy.video.fx.all
+    import sys, os, simpleaudio, math, ffmpeg, random, atexit
+    atexit.register(crashHandler)
     programDirectory = (__file__.replace("\\", "/").removesuffix("/Main.py"))
-    modelList = ["tts_models/bg/cv/vits", "tts_models/cs/cv/vits", "tts_models/da/cv/vits", "tts_models/et/cv/vits", "tts_models/ga/cv/vits", "tts_models/en/ek1/tacotron2", "tts_models/en/ljspeech/tacotron2-DDC", "tts_models/en/ljspeech/tacotron2-DDC_ph", "tts_models/en/ljspeech/glow-tts", "tts_models/en/ljspeech/speedy-speech", "tts_models/en/ljspeech/tacotron2-DCA", "tts_models/en/ljspeech/vits", "tts_models/en/ljspeech/vits--neon", "tts_models/en/ljspeech/fast_pitch", "tts_models/en/ljspeech/overflow", "tts_models/en/ljspeech/neural_hmm", "tts_models/en/sam/tacotron-DDC", "tts_models/en/blizzard2013/capacitron-t2-c50", "tts_models/en/blizzard2013/capacitron-t2-c150_v2", "tts_models/en/multi-dataset/tortoise-v2", "tts_models/en/jenny/jenny", "tts_models/es/mai/tacotron2-DDC", "tts_models/es/css10/vits", "tts_models/fr/mai/tacotron2-DDC", "tts_models/fr/css10/vits", "tts_models/uk/mai/glow-tts", "tts_models/uk/mai/vits", "tts_models/zh-CN/baker/tacotron2-DDC-GST", "tts_models/nl/mai/tacotron2-DDC", "tts_models/nl/css10/vits", "tts_models/de/thorsten/tacotron2-DCA", "tts_models/de/thorsten/vits", "tts_models/de/thorsten/tacotron2-DDC", "tts_models/de/css10/vits-neon", "tts_models/ja/kokoro/tacotron2-DDC", "tts_models/tr/common-voice/glow-tts", "tts_models/it/mai_female/glow-tts", "tts_models/it/mai_female/vits", "tts_models/it/mai_male/glow-tts", "tts_models/it/mai_male/vits", "tts_models/ewe/openbible/vits", "tts_models/hau/openbible/vits", "tts_models/lin/openbible/vits", "tts_models/tw_akuapem/openbible/vits", "tts_models/tw_asante/openbible/vits", "tts_models/yor/openbible/vits", "tts_models/hu/css10/vits", "tts_models/el/cv/vits", "tts_models/fi/css10/vits", "tts_models/hr/cv/vits", "tts_models/lt/cv/vits", "tts_models/lv/cv/vits", "tts_models/mt/cv/vits", "tts_models/pl/mai_female/vits", "tts_models/pt/cv/vits", "tts_models/ro/cv/vits", "tts_models/sk/cv/vits", "tts_models/sl/cv/vits", "tts_models/sv/cv/vits", "tts_models/ca/custom/vits", "tts_models/fa/custom/glow-tts", "tts_models/bn/custom/vits-male", "tts_models/bn/custom/vits-female", "tts_models/be/common-voice/glow-tts"]
+    modelList = ["tts_models/bg/cv/vits", "tts_models/cs/cv/vits", "]tts_models/da/cv/vits", "tts_models/et/cv/vits", "tts_models/ga/cv/vits", "tts_models/en/ek1/tacotron2", "tts_models/en/ljspeech/tacotron2-DDC", "tts_models/en/ljspeech/tacotron2-DDC_ph", "tts_models/en/ljspeech/glow-tts", "tts_models/en/ljspeech/speedy-speech", "tts_models/en/ljspeech/tacotron2-DCA", "tts_models/en/ljspeech/vits", "tts_models/en/ljspeech/vits--neon", "tts_models/en/ljspeech/fast_pitch", "tts_models/en/ljspeech/overflow", "tts_models/en/ljspeech/neural_hmm", "tts_models/en/sam/tacotron-DDC", "tts_models/en/blizzard2013/capacitron-t2-c50", "tts_models/en/blizzard2013/capacitron-t2-c150_v2", "tts_models/en/multi-dataset/tortoise-v2", "tts_models/en/jenny/jenny", "tts_models/es/mai/tacotron2-DDC", "tts_models/es/css10/vits", "tts_models/fr/mai/tacotron2-DDC", "tts_models/fr/css10/vits", "tts_models/uk/mai/glow-tts", "tts_models/uk/mai/vits", "tts_models/zh-CN/baker/tacotron2-DDC-GST", "tts_models/nl/mai/tacotron2-DDC", "tts_models/nl/css10/vits", "tts_models/de/thorsten/tacotron2-DCA", "tts_models/de/thorsten/vits", "tts_models/de/thorsten/tacotron2-DDC", "tts_models/de/css10/vits-neon", "tts_models/ja/kokoro/tacotron2-DDC", "tts_models/tr/common-voice/glow-tts", "tts_models/it/mai_female/glow-tts", "tts_models/it/mai_female/vits", "tts_models/it/mai_male/glow-tts", "tts_models/it/mai_male/vits", "tts_models/ewe/openbible/vits", "tts_models/hau/openbible/vits", "tts_models/lin/openbible/vits", "tts_models/tw_akuapem/openbible/vits", "tts_models/tw_asante/openbible/vits", "tts_models/yor/openbible/vits", "tts_models/hu/css10/vits", "tts_models/el/cv/vits", "tts_models/fi/css10/vits", "tts_models/hr/cv/vits", "tts_models/lt/cv/vits", "tts_models/lv/cv/vits", "tts_models/mt/cv/vits", "tts_models/pl/mai_female/vits", "tts_models/pt/cv/vits", "tts_models/ro/cv/vits", "tts_models/sk/cv/vits", "tts_models/sl/cv/vits", "tts_models/sv/cv/vits", "tts_models/ca/custom/vits", "tts_models/fa/custom/glow-tts", "tts_models/bn/custom/vits-male", "tts_models/bn/custom/vits-female", "tts_models/be/common-voice/glow-tts"]
     loadingClass = loadingFunction()
     deleteGeneratedFilesClass = deleteGeneratedFiles([])
     loadingClass.startLoadingAnimation()
@@ -238,6 +264,7 @@ if __name__ == "__main__":
             createAudioFile(settings._ttsModel, script.scriptFileText, settings._language, settings._speed, settings._outputAudioName)
             createSubtitles(settings._whisperModel, settings._outputAudioName, settings._subtitleOutputFileName, settings._language)
             makeBackgroundVideoSegment(settings._videoBackgroundFolder, settings._outputAudioName)
+            changeVideoResolution("9:16", settings._outputVideoName)
             applySubtitlesToVideo(settings._language, settings._outputVideoName)
             applyAudioToVideo(settings._outputVideoName, settings._outputAudioName)
         loadingClass.endLoadingAnimation()

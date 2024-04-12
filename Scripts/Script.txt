@@ -1,1 +1,1 @@
-I am testing right now. Test
+This is a test script
