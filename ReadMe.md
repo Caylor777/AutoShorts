@@ -10,11 +10,11 @@ Install before using:
 
 ## Usage
 How to Use:  
-    Use "settings.txt" to config the program (Note: Must keep space after "=")  
+    Use "settings.txt" to config the program (Note: Must keep space before and after "=")  
     Put ".txt" Files in the "Scripts" Folder and the program will make a new video per script in the folder  
     Youtube(only) links in the "backgroundVideoList.txt" file will downloaded if the "downloadVideosInLinksFile" setting is "True"  
-    "downloadVideosInLinksFile = True" will prevent the main program from running and only download the videos  
-    (Note: "downloadVideosInLinksFile" is for easily downloading background videos)  
+    "downloadVideosInLinksFile = True" will prevent the main program from running and will only download the videos  
+    (Note: "downloadVideosInLinksFile" is for easily downloading background videos and use a new line for each link)  
 How it works:  
     For evey script in "Scripts" folder a video is made  
     Videos in the "backgroundVideos" folder will be randomly chosen for each script  
