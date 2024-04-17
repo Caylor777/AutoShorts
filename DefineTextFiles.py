@@ -16,7 +16,8 @@ class settingsFile:
                 outputAudioName: str,
                 subtitleOutputFileName: str,
                 outputVideoName: str,
-                videoBackgroundFolder: str,
+                outputVideoFolderName: str,
+                videoBackgroundFolderName: str,
                 videoBackgroundLinksFileName : str,
                 downloadVideosInLinksFile: bool,
                 loopAllModels: bool,
@@ -53,7 +54,8 @@ class settingsFile:
         self._outputAudioName = outputAudioName
         self._subtitleOutputFileName = subtitleOutputFileName
         self._outputVideoName = outputVideoName
-        self._videoBackgroundFolder = videoBackgroundFolder
+        self._outputVideoFolderName = outputVideoFolderName
+        self._videoBackgroundFolderName = videoBackgroundFolderName
         self._videoBackgroundLinksFileName = videoBackgroundLinksFileName
         if downloadVideosInLinksFile.upper() == "TRUE":
             self._downloadVideosInLinksFile = True
