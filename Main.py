@@ -185,7 +185,7 @@ if __name__ == "__main__":
     settings = getSettingsFileClass(programDirectory, "settings.txt")
     scriptFileList = os.listdir(f"{programDirectory}/{settings._scriptsFolderName}")
     if settings._downloadVideosInLinksFile:
-        downloadBackgroudVidoes(settings._videoBackgroundLinksFileName, settings._videoBackgroundFolder)
+        downloadBackgroudVidoes(settings._videoBackgroundLinksFileName, settings._videoBackgroundFolderName)
     if settings._loopAllModels:
         loopAllModels(settings._language, settings._outputAudioName)
         loadingClass.endLoadingAnimation()
