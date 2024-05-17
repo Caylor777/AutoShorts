@@ -92,7 +92,7 @@ All TTS Voices:
 ## Dependencies
 "https://visualstudio.microsoft.com/visual-cpp-build-tools/"  
 "https://github.com/espeak-ng/espeak-ng/releases/tag/1.51"  
-pip packages: "pytube", "TTS", "faster_whisper", "ffmpeg-python" or requirements.txt
+pip packages: "pytube", "TTS", "faster_whisper", "ffmpeg-python", "simpleaudio" or requirements.txt
 
 ## Contributing
 https://github.com/Caylor777
