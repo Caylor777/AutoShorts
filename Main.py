@@ -119,7 +119,7 @@ def loopAllModels(language: str, outputAudioName: str) -> None:
     for model in modelList:
         if model.find(language) == 11:
             print(f"Writing TTS Model {model}")
-            createAudioFile(model, "My name is, " + model.replace("/", " ").replace("_", " ").replace("-", " "))
+            createAudioFile(model, "My name is, " + model.replace("/", " ").replace("_", " ").replace("-", " "), settings._language, settings._speed, settings._outputAudioName)
             print(f"Current TTS Model: {model}")
             audioFile = simpleaudio.WaveObject.from_wave_file(f"{programDirectory}/{outputAudioName}")
             audioPlay = audioFile.play()
