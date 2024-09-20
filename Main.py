@@ -44,58 +44,10 @@ def format_time(seconds):
     formatted_time = f"{hours:02d}:{minutes:02d}:{seconds:01d},{milliseconds:03d}"
     return formatted_time
 
-def getSettingsFileClass(programDirectory: str, settingsFileName: str) -> object:
-    with open(f"{programDirectory}/{settingsFileName}") as inp:
-        settingsList = inp.read().splitlines()
-    settings = settingsFile(
-                    settingsList[3].split(" = ")[1],
-                    settingsList[4].split(" = ")[1],
-                    settingsList[5].split(" = ")[1],
-                    settingsList[6].split(" = ")[1],
-                    settingsList[7].split(" = ")[1],
-                    settingsList[8].split(" = ")[1],
-                    settingsList[9].split(" = ")[1],
-                    settingsList[10].split(" = ")[1],
-                    settingsList[11].split(" = ")[1],
-                    settingsList[12].split(" = ")[1],
-                    settingsList[13].split(" = ")[1],
-                    settingsList[14].split(" = ")[1],
-                    settingsList[15].split(" = ")[1],
-                    settingsList[16].split(" = ")[1],
-                    settingsList[20].split(" = ")[1],
-                    settingsList[21].split(" = ")[1],
-                    settingsList[22].split(" = ")[1],
-                    settingsList[23].split(" = ")[1],
-                    settingsList[24].split(" = ")[1],
-                    settingsList[25].split(" = ")[1],
-                    settingsList[26].split(" = ")[1],
-                    settingsList[27].split(" = ")[1],
-                    settingsList[28].split(" = ")[1],
-                    settingsList[29].split(" = ")[1],
-                    settingsList[30].split(" = ")[1],
-                    settingsList[31].split(" = ")[1],
-                    settingsList[32].split(" = ")[1],
-                    settingsList[33].split(" = ")[1],
-                    settingsList[34].split(" = ")[1],
-                    settingsList[35].split(" = ")[1],
-                    settingsList[36].split(" = ")[1],
-                    settingsList[37].split(" = ")[1],
-                    settingsList[38].split(" = ")[1],
-                    settingsList[39].split(" = ")[1],
-                    settingsList[40].split(" = ")[1],
-                    settingsList[41].split(" = ")[1],
-                    settingsList[42].split(" = ")[1]
-                    )
-    return settings
-
-def getScripFileClass(programDirectory: str, scriptsFolderName:str, ScriptFileName: str) -> object:
-    script = scriptFile(
-                        open(f"{programDirectory}/{scriptsFolderName}/{ScriptFileName}", 'r', encoding='utf-8'),
-                        f"{programDirectory}/{scriptsFolderName}/{ScriptFileName}",
-                        "N/A"
-                       )
-    script.scriptFileText = script.scriptFile.read()
-    script.scriptFile.close()
+def getScripFile(programDirectory: str, scriptsFolderName:str, ScriptFileName: str) -> object:
+    f = (open(f"{programDirectory}/{scriptsFolderName}/{ScriptFileName}", 'r', encoding='utf-8'))
+    script = f.read()
+    f.close()
     return script
 
 def downloadBackgroudVidoes(videoBackgroundLinksFileName: str, videoBackgroundFolder: str) -> None:
@@ -174,41 +126,41 @@ if __name__ == "__main__":
     startUpScreen()
     from TTS.api import TTS
     from videoFunctionsFFMPEG import videoFunctionsFFMPEG as editor
-    from DefineTextFiles import scriptFile, settingsFile
     from deleteGeneratedFiles import deleteGeneratedFiles
     from loadingFunction import loadingFunction
     from pytube import YouTube
-    import sys, os, simpleaudio, math, random, atexit, ffmpeg
+    import sys, os, simpleaudio, math, random, atexit, ffmpeg, json
+    
     atexit.register(crashHandler)
+    f = open("settings.json")
+    settings = json.load(f)
+    f.close() 
+    
     programDirectory = (__file__.replace("\\", "/").removesuffix("/Main.py"))
     programDirectory = programDirectory.removesuffix("/main.py")
     modelList = ["tts_models/bg/cv/vits", "tts_models/cs/cv/vits", "tts_models/da/cv/vits", "tts_models/et/cv/vits", "tts_models/ga/cv/vits", "tts_models/en/ek1/tacotron2", "tts_models/en/ljspeech/tacotron2-DDC", "tts_models/en/ljspeech/tacotron2-DDC_ph", "tts_models/en/ljspeech/glow-tts", "tts_models/en/ljspeech/speedy-speech", "tts_models/en/ljspeech/tacotron2-DCA", "tts_models/en/ljspeech/vits", "tts_models/en/ljspeech/vits--neon", "tts_models/en/ljspeech/fast_pitch", "tts_models/en/ljspeech/overflow", "tts_models/en/ljspeech/neural_hmm", "tts_models/en/sam/tacotron-DDC", "tts_models/en/blizzard2013/capacitron-t2-c50", "tts_models/en/blizzard2013/capacitron-t2-c150_v2", "tts_models/en/multi-dataset/tortoise-v2", "tts_models/en/jenny/jenny", "tts_models/es/mai/tacotron2-DDC", "tts_models/es/css10/vits", "tts_models/fr/mai/tacotron2-DDC", "tts_models/fr/css10/vits", "tts_models/uk/mai/glow-tts", "tts_models/uk/mai/vits", "tts_models/zh-CN/baker/tacotron2-DDC-GST", "tts_models/nl/mai/tacotron2-DDC", "tts_models/nl/css10/vits", "tts_models/de/thorsten/tacotron2-DCA", "tts_models/de/thorsten/vits", "tts_models/de/thorsten/tacotron2-DDC", "tts_models/de/css10/vits-neon", "tts_models/ja/kokoro/tacotron2-DDC", "tts_models/tr/common-voice/glow-tts", "tts_models/it/mai_female/glow-tts", "tts_models/it/mai_female/vits", "tts_models/it/mai_male/glow-tts", "tts_models/it/mai_male/vits", "tts_models/ewe/openbible/vits", "tts_models/hau/openbible/vits", "tts_models/lin/openbible/vits", "tts_models/tw_akuapem/openbible/vits", "tts_models/tw_asante/openbible/vits", "tts_models/yor/openbible/vits", "tts_models/hu/css10/vits", "tts_models/el/cv/vits", "tts_models/fi/css10/vits", "tts_models/hr/cv/vits", "tts_models/lt/cv/vits", "tts_models/lv/cv/vits", "tts_models/mt/cv/vits", "tts_models/pl/mai_female/vits", "tts_models/pt/cv/vits", "tts_models/ro/cv/vits", "tts_models/sk/cv/vits", "tts_models/sl/cv/vits", "tts_models/sv/cv/vits", "tts_models/ca/custom/vits", "tts_models/fa/custom/glow-tts", "tts_models/bn/custom/vits-male", "tts_models/bn/custom/vits-female", "tts_models/be/common-voice/glow-tts"]
     loadingClass = loadingFunction()
     deleteGeneratedFilesClass = deleteGeneratedFiles([])
     loadingClass.startLoadingAnimation()
-    settings = getSettingsFileClass(programDirectory, "settings.txt")
-    scriptFileList = os.listdir(f"{programDirectory}/{settings._scriptsFolderName}")
-    if settings._downloadVideosInLinksFile:
-        downloadBackgroudVidoes(settings._videoBackgroundLinksFileName, settings._videoBackgroundFolderName)
-    if settings._loopAllModels:
-        loopAllModels(settings._language, settings._outputAudioName)
+    scriptFileList = os.listdir(settings["scriptsFolderName"])
+    if settings["downloadVideosInLinksFile"]:
+        downloadBackgroudVidoes(settings["videoBackgroundLinksFileName"], settings["videoBackgroundFolderName"])
+    if settings["loopAllModels"]:
+        loopAllModels(settings["language"], settings["outputAudioName"])
         loadingClass.endLoadingAnimation()
         exitHandler()
     else:
         for i in range(0, len(scriptFileList)):
-            script = getScripFileClass(programDirectory, settings._scriptsFolderName, scriptFileList[i])
+            script = getScripFile(programDirectory, settings["scriptsFolderName"], scriptFileList[i])
             deleteGeneratedFilesClass.deleteGeneratedFiles()
-            createAudioFile(settings._ttsModel, script.scriptFileText, settings._language, settings._speed, settings._outputAudioName)
-            editor.createSubtitles(programDirectory, settings._whisperModel, settings._outputAudioName, settings._subtitleOutputFileName, settings._language)
-            editor.formatAssFile(f"{programDirectory}/sub-titles.{settings._language}.ass", settings._name, settings._fontName, settings._fontSize, settings._primaryColour, settings._secondaryColour, settings._outlineColour, settings._backColour, settings._bold, settings._italic, settings._underLine, settings._strikeOut, settings._scaleX, settings._scaleY, settings._spacing, settings._angle, settings._borderStyle, settings._outline, settings._shadow, settings._alignment, settings._marginL, settings._marginR, settings._marginV, settings._encoding)
-            makeBackgroundVideoSegment(settings._videoBackgroundFolderName, settings._outputAudioName)
-            editor.changeVideoResolution("9:16", f"{programDirectory}/TEMP.mp4", f"{programDirectory}/{settings._outputVideoName}")
-            editor.applySubtitlesToVideo(f"sub-titles.{settings._language}.ass", f"{programDirectory}/{settings._outputVideoName}", f"{programDirectory}/TEMP.mp4")
-            editor.applyAudioToVideo(f"{programDirectory}/TEMP.mp4", f"{programDirectory}/{settings._outputAudioName}", f"{programDirectory}/{settings._outputVideoFolderName}/#{i + 1}{settings._outputVideoName}")
+            createAudioFile(settings["ttsModel"], script, settings["language"], settings["speed"], settings["outputAudioName"])
+            editor.createSubtitles(programDirectory, settings["whisperModel"], settings["outputAudioName"], settings["subtitleOutputFileName"], settings["language"])
+            editor.formatAssFile("sub-titles.%(language)s.ass" % settings, settings["name"], settings["fontName"], settings["fontSize"], settings["primaryColour"], settings["secondaryColour"], settings["outlineColour"], settings["backColour"], settings["bold"], settings["italic"], settings["underLine"], settings["strikeOut"], settings["_scaleX"], settings["scaleY"], settings["spacing"], settings["angle"], settings["borderStyle"], settings["outline"], settings["shadow"], settings["alignment"], settings["marginL"], settings["marginR"], settings["marginV"], settings["encoding"])
+            makeBackgroundVideoSegment(settings["videoBackgroundFolderName"], settings["outputAudioName"])
+            editor.changeVideoResolution("9:16", "TEMP.mp4", settings["outputVideoName"])
+            editor.applySubtitlesToVideo("sub-titles.%(language)s.ass" % settings, settings["outputVideoName"], "TEMP.mp4")
+            editor.applyAudioToVideo(f"{programDirectory}/TEMP.mp4", settings["outputAudioName"], settings["outputVideoFolderName"], str(i + 1) + settings["outputVideoName"])
             os.remove(f"{programDirectory}/TEMP.mp4")
         deleteGeneratedFilesClass.deleteGeneratedFiles()
         loadingClass.endLoadingAnimation()
         exitHandler("All Tasks Completed")
-else:
-    import sys
-    sys.exit("ERROR: This is the main file, not to be imported")

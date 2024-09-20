@@ -69,7 +69,7 @@ class videoFunctionsFFMPEG:
             f.write(formatedStyle)
             f.close()
         
-    def changeVideoResolution(aspectRatio: str, inputVideoPath: str, outputVideoPath) -> None:
+    def changeVideoResolution(aspectRatio: str, inputVideoPath: str, outputVideoPath: str) -> None:
         "aspectRatio-x:y"
         aspectRatio = aspectRatio.replace(":", "/")
         (
@@ -80,7 +80,7 @@ class videoFunctionsFFMPEG:
         .run(overwrite_output = True)
         )
         
-    def applySubtitlesToVideo(assFileName: str, inputVideoPath: str, outputVideoPath) -> None:
+    def applySubtitlesToVideo(assFileName: str, inputVideoPath: str, outputVideoPath: str) -> None:
         ".ass file must be in the same directory as the input video"
         (
         ffmpeg
