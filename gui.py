@@ -84,25 +84,75 @@ class App(customtkinter.CTk):
         self.outputVideoFolderName_input_button.grid(row=8, column=0, padx=0, pady=10)
         self.backgroundVideoFolderName_input_button = customtkinter.CTkButton(self.scrollable_frame_settings_tab, text="Background Video Folder Name: N/A", command=self.backgroundVideoFolderHandler)
         self.backgroundVideoFolderName_input_button.grid(row=9, column=0, padx=0, pady=10)
-        self.test = customtkinter.CTkBaseClass(self.scrollable_frame_settings_tab, height=25)
-        self.test.grid(row=10, column=0, padx=0, pady=10)
-        self.backgroundVideoList_input_feild = customtkinter.CTkEntry(self.scrollable_frame_settings_tab, placeholder_text="Youtube Video Link")
-        self.backgroundVideoList_input_feild.place_configure(x=10, y=665)
-        self.backgroundVideoList_input_feild_submit_button = customtkinter.CTkButton(self.scrollable_frame_settings_tab, anchor="e", width=50, text="Submit", command=self.backgroundVideoListHandler)
-        self.backgroundVideoList_input_feild_submit_button.place_configure(x=235, y=665)
+        self.backgroundVideoLink_input_comboBox = customtkinter.CTkComboBox(self.scrollable_frame_settings_tab, width=300, values=["Background Video Links:", ""], command=self.backgroundVideoListActiveIndexSetter)
+        self.backgroundVideoLink_input_comboBox.grid(row=10, column=0, padx=0, pady=10)
+        self.backgroundVideoLink_input_comboBox.bind("<KeyRelease>", self.backgroundVideoListHandler)
         #Subtitle Settings tab
-        self.label_tab_2 = customtkinter.CTkLabel(self.tabview.tab("Subtitle Settings"), text="CTkLabel on Subtitle Settings")
-        self.label_tab_2.grid(row=0, column=0, padx=20, pady=20)
+        self.scrollable_frame_subtitle_tab = customtkinter.CTkScrollableFrame(self.tabview.tab("Subtitle Settings"), height=420)
+        self.scrollable_frame_subtitle_tab.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
+        self.scrollable_frame_subtitle_tab.grid_columnconfigure(0, weight=1)
+        self.name_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Name: N/A", command=self.nameHandler)
+        self.name_input_button.grid(row=0, column=0, padx=0, pady=10)
+        self.fontname_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Font Name: N/A", command=self.fontnameHandler)
+        self.fontname_input_button.grid(row=1, column=0, padx=0, pady=10)
+        self.fontsize_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Font Size: N/A", command=self.fontsizeHandler)
+        self.fontsize_input_button.grid(row=2, column=0, padx=0, pady=10)
+        self.primaryColor_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Primary Color: N/A", command=self.primaryColorHandler)
+        self.primaryColor_input_button.grid(row=3, column=0, padx=0, pady=10)
+        self.secondaryColor_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Secondary Color: N/A", command=self.secondaryColorHandler)
+        self.secondaryColor_input_button.grid(row=4, column=0, padx=0, pady=10)
+        self.outlineColor_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Outline Color: N/A", command=self.outlineColorHandler)
+        self.outlineColor_input_button.grid(row=5, column=0, padx=0, pady=10)
+        self.backColor_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Back Color: N/A", command=self.backColorHandler)
+        self.backColor_input_button.grid(row=5, column=0, padx=0, pady=10)
+        self.scaleX_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Scale X: N/A", command=self.scaleXHandler)
+        self.scaleX_input_button.grid(row=6, column=0, padx=0, pady=10)
+        self.scaleY_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Scale Y: N/A", command=self.scaleYHandler)
+        self.scaleY_input_button.grid(row=7, column=0, padx=0, pady=10)
+        self.spacing_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Spacing: N/A", command=self.spacingHandler)
+        self.spacing_input_button.grid(row=8, column=0, padx=0, pady=10)
+        self.angle_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Angle: N/A", command=self.angleHandler)
+        self.angle_input_button.grid(row=9, column=0, padx=0, pady=10)
+        self.borderStyle_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Border Style: N/A", command=self.borderStyleHandler)
+        self.borderStyle_input_button.grid(row=10, column=0, padx=0, pady=10)
+        self.outline_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Outline: N/A", command=self.outlineHandler)
+        self.outline_input_button.grid(row=11, column=0, padx=0, pady=10)
+        self.shadow_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Shadow: N/A", command=self.shadowHandler)
+        self.shadow_input_button.grid(row=12, column=0, padx=0, pady=10)
+        self.alignment_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Alignment: N/A", command=self.alignmentHandler)
+        self.alignment_input_button.grid(row=13, column=0, padx=0, pady=10)
+        self.marginL_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Margin Left: N/A", command=self.marginLHandler)
+        self.marginL_input_button.grid(row=14, column=0, padx=0, pady=10)
+        self.marginR_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Margin Right: N/A", command=self.marginRHandler)
+        self.marginR_input_button.grid(row=15, column=0, padx=0, pady=10)
+        self.marginV_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Margin Vertical: N/A", command=self.marginVHandler)
+        self.marginV_input_button.grid(row=16, column=0, padx=0, pady=10)
+        self.encoding_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Encoding: N/A", command=self.encodingHandler)
+        self.encoding_input_button.grid(row=17, column=0, padx=0, pady=10)
+        self.bold_checkbox = customtkinter.CTkCheckBox(self.scrollable_frame_subtitle_tab, text="Bold", command=self.boldHandler)
+        self.bold_checkbox.grid(row=18, column=0, padx=0, pady=10)
+        self.italic_checkbox = customtkinter.CTkCheckBox(self.scrollable_frame_subtitle_tab, text="Italic", command=self.italicHandler)
+        self.italic_checkbox.grid(row=19, column=0, padx=0, pady=10)
+        self.underLine_checkbox = customtkinter.CTkCheckBox(self.scrollable_frame_subtitle_tab, text="UnderLine", command=self.underLineHandler)
+        self.underLine_checkbox.grid(row=20, column=0, padx=0, pady=10)
+        self.strikeOut_checkbox = customtkinter.CTkCheckBox(self.scrollable_frame_subtitle_tab, text="StrikeOut", command=self.strikeOutHandler)
+        self.strikeOut_checkbox.grid(row=21, column=0, padx=0, pady=10)
         #Dictionary tab
-        self.scrollable_frame_Tab3 = customtkinter.CTkScrollableFrame(self.tabview.tab("Dictionary"), height=420)
-        self.scrollable_frame_Tab3.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
-        self.scrollable_frame_Tab3.grid_columnconfigure(0, weight=0)
-        self.scrollable_frame_switches_Tab3 = []
-        for i in range(100):
-            switch = customtkinter.CTkSwitch(master=self.scrollable_frame_Tab3, text=f"CTkSwitch {i}")
-            switch.grid(row=i, column=0, padx=10, pady=(0, 20))
-            self.scrollable_frame_switches_Tab3.append(switch)
-
+        self.dictEntrys = 0
+        self.scrollable_frame_dictionary_tab = customtkinter.CTkScrollableFrame(self.tabview.tab("Dictionary"), height=420)
+        self.scrollable_frame_dictionary_tab.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
+        self.scrollable_frame_dictionary_tab.grid_columnconfigure(0, weight=1)
+        self.dictionary_entry_placehold = customtkinter.CTkBaseClass(self.scrollable_frame_dictionary_tab, height=10)
+        self.dictionary_entry_placehold.grid(row=0, column=0, padx=0, pady=10)
+        self.dictionaryKey_entry = customtkinter.CTkEntry(self.scrollable_frame_dictionary_tab, placeholder_text="Key", width=75)
+        self.dictionaryKey_entry.place_configure(x=0)
+        self.dictionary_colon_label = customtkinter.CTkLabel(self.scrollable_frame_dictionary_tab, text=":")
+        self.dictionary_colon_label.place(x=77)
+        self.dictionaryDef_entry = customtkinter.CTkEntry(self.scrollable_frame_dictionary_tab, placeholder_text="Def", width=75)
+        self.dictionaryDef_entry.place_configure(x=125)
+        self.dictionary_add_button = customtkinter.CTkButton(self.scrollable_frame_dictionary_tab, width=50, text="add", command=self.addDictionaryEntry)
+        self.dictionary_add_button.place(x=165)
+        
         # create radiobutton frame
         self.radiobutton_frame = customtkinter.CTkFrame(self)
         self.radiobutton_frame.grid(row=0, column=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
@@ -244,11 +294,236 @@ class App(customtkinter.CTk):
             pathExists = os.path.exists(dialogInput)
             prompt = "Enter a vaild path or folder name in program directory: "
         self.backgroundVideoFolderName_input_button.configure(text=f"Background Video Folder Name: {dialogInput}")
+        
+    def backgroundVideoListActiveIndexSetter(self, value):
+        options = self.backgroundVideoLink_input_comboBox._values
+        index = options.index(value)
+        self.backgroundVideoLink_input_comboBox._index = index
     
-    def backgroundVideoListHandler(self):
-        input = self.backgroundVideoList_input_feild.get()
-        self.backgroundVideoList_input_feild.clear
+    def backgroundVideoListHandler(self, value):
+        input = self.backgroundVideoLink_input_comboBox.get()
+        options = self.backgroundVideoLink_input_comboBox._values
+        options[self.backgroundVideoLink_input_comboBox._index] = input
+        empty = False
+        for i in options:
+            if i == "":
+                empty = True
+        if not empty:
+            options.append("")
+        self.backgroundVideoLink_input_comboBox.configure(values=options)
 
+    def nameHandler(self):
+        dialog = customtkinter.CTkInputDialog(text="Enter subtitle name: ", title="Subtitle.name")
+        dialogInput = dialog.get_input()
+        if dialogInput == None:
+            return
+        self.name_input_button.configure(text=f"Name: {dialogInput}")
+        
+    def fontnameHandler(self):
+        dialog = customtkinter.CTkInputDialog(text="Enter font name: ", title="Subtitle.fontname")
+        dialogInput = dialog.get_input()
+        if dialogInput == None:
+            return
+        self.fontname_input_button.configure(text=f"Font Name: {dialogInput}")
+        
+    def fontsizeHandler(self):
+        numeric = False
+        prompt = "Enter Font Size: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.fontsize")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.fontsize_input_button.configure(text=f"Font Size: {dialogInput}")
+    
+    def primaryColorHandler(self):
+        dialog = customtkinter.CTkInputDialog(text="Enter Primary Color: ", title="Subtitle.primaryColor")
+        dialogInput = dialog.get_input()
+        if dialogInput == None:
+            return
+        self.primaryColor_input_button.configure(text=f"Primary Color: {dialogInput}")
+        
+    def secondaryColorHandler(self):
+        dialog = customtkinter.CTkInputDialog(text="Enter Secondary Color: ", title="Subtitle.secondaryColor")
+        dialogInput = dialog.get_input()
+        if dialogInput == None:
+            return
+        self.secondaryColor_input_button.configure(text=f"Secondary Color: {dialogInput}")
+        
+    def outlineColorHandler(self):
+        dialog = customtkinter.CTkInputDialog(text="Enter Outline Color: ", title="Subtitle.outlineColor")
+        dialogInput = dialog.get_input()
+        if dialogInput == None:
+            return
+        self.outlineColor_input_button.configure(text=f"Outline Color: {dialogInput}")
+        
+    def backColorHandler(self):
+        dialog = customtkinter.CTkInputDialog(text="Enter Back Color: ", title="Subtitle.backColor")
+        dialogInput = dialog.get_input()
+        if dialogInput == None:
+            return
+        self.backColor_input_button.configure(text=f"Back Color: {dialogInput}")
+        
+    def scaleXHandler(self):
+        numeric = False
+        prompt = "Enter Scale X: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.scaleX")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.scaleX_input_button.configure(text=f"Scale X: {dialogInput}")
+        
+    def scaleYHandler(self):
+        numeric = False
+        prompt = "Enter Scale Y: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.scaleY")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.scaleY_input_button.configure(text=f"Scale Y: {dialogInput}")
+        
+    def spacingHandler(self):
+        numeric = False
+        prompt = "Enter Spacing: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.spacing")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.spacing_input_button.configure(text=f"Spacing: {dialogInput}")
+        
+    def angleHandler(self):
+        numeric = False
+        prompt = "Enter Angle: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.angle")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.angle_input_button.configure(text=f"Angle: {dialogInput}")
+        
+    def borderStyleHandler(self):
+        numeric = False
+        prompt = "Enter border Style: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.borderStyle")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.borderStyle_input_button.configure(text=f"Border Style: {dialogInput}")
+        
+    def outlineHandler(self):
+        numeric = False
+        prompt = "Enter Outline: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.outline")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.outline_input_button.configure(text=f"Outline: {dialogInput}")
+        
+    def shadowHandler(self):
+        numeric = False
+        prompt = "Enter Shadow: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.shadow")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.shadow_input_button.configure(text=f"Shadow: {dialogInput}")
+        
+    def alignmentHandler(self):
+        numeric = False
+        prompt = "Enter Alignment: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.alignment")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.alignment_input_button.configure(text=f"Alignment: {dialogInput}")
+        
+    def marginLHandler(self):
+        numeric = False
+        prompt = "Enter Margin Left: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.marginL")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.marginL_input_button.configure(text=f"Margin Left: {dialogInput}")
+        
+    def marginRHandler(self):
+        numeric = False
+        prompt = "Enter Margin Right: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.marginR")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.marginR_input_button.configure(text=f"Margin Right: {dialogInput}")
+        
+    def marginVHandler(self):
+        numeric = False
+        prompt = "Enter Margin Vertical: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.marginV")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.marginV_input_button.configure(text=f"Margin Vertical: {dialogInput}")
+        
+    def encodingHandler(self):
+        numeric = False
+        prompt = "Enter Encoding: "
+        while not numeric:
+            dialog = customtkinter.CTkInputDialog(text=prompt, title="Subtitle.encoding")
+            dialogInput = dialog.get_input()
+            numeric = dialogInput.isnumeric()
+            prompt = "Enter a number: "
+        self.encoding_input_button.configure(text=f"Encoding: {dialogInput}")
+        
+    def boldHandler(self):
+        print(f"Bold: {self.bold_checkbox.get()}")
+        
+    def italicHandler(self):
+        print(f"Italic: {self.italic_checkbox.get()}")
+        
+    def underLineHandler(self):
+        print(f"UnderLine: {self.underLine_checkbox.get()}")
+        
+    def strikeOutHandler(self):
+        print(f"StrikeOut: {self.strikeOut_checkbox.get()}")
+        
+    class dictEntry:
+        def __init__(self, dictKey, dictDef, row):
+            self.dictKey = dictKey
+            self.dictDef = dictDef
+            self.row = row
+            self.entry = customtkinter.CTkFrame(app.scrollable_frame_dictionary_tab, height=30)
+            self.entry.grid(row=row, column=0, padx=0, pady=10)
+            app.dictEntrys = app.dictEntrys
+            self.label = customtkinter.CTkLabel(self.entry, text=f"{dictKey} : {dictDef}", wraplength=200)
+            self.label.place(x=0)
+            self.button = customtkinter.CTkButton(self.entry, width=15, text="delete", command=self.deleteEntry)
+            self.button.place(x=150)
+        
+        def deleteEntry(self):
+            self.entry.destroy()
+        
+    def addDictionaryEntry(self):
+        self.dictEntrys += 1
+        dictKey = self.dictionaryKey_entry.get()
+        self.dictionaryKey_entry.delete(0, len(dictKey))
+        dictDef = self.dictionaryDef_entry.get()
+        self.dictionaryDef_entry.delete(0, len(dictDef))
+        entry = self.dictEntry(dictKey, dictDef, self.dictEntrys)
+        
+            
+            
+    
+        
 if __name__ == "__main__":
     app = App()
     app.mainloop()
