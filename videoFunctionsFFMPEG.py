@@ -8,9 +8,9 @@ def format_time(seconds):
         seconds = floor(seconds)
         formatted_time = f"{hours:02d}:{minutes:02d}:{seconds:01d},{milliseconds:03d}"
         return formatted_time
+    
 import ffmpeg
 class videoFunctionsFFMPEG:
-    
     def createSubtitles(workingDirectory: str, whisperModel: str, outputAudioName: str, subtitleOutputFileName: str, language: str) -> None:
         import os
         "whisperModel-\"tiny\", \"base\", \"small\", \"medium\", \"large\", \"large-v3\""
@@ -98,4 +98,3 @@ class videoFunctionsFFMPEG:
         .output(outputVideoPath)
         .run(overwrite_output=True)
         )
-        
