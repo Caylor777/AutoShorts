@@ -1,7 +1,7 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
-import main, json, os
+import json, os
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -150,20 +150,20 @@ class App(customtkinter.CTk):
         self.resetSubtitleSettings_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Reset Subtitle Settings", command=self.resetSubtitleSettings)
         self.resetSubtitleSettings_button.grid(row=23, column=0, padx=0, pady=10)
         #Dictionary tab
-        self.dictEntrys = 0
+        self.dictEntrys = []
         self.scrollable_frame_dictionary_tab = customtkinter.CTkScrollableFrame(self.tabview.tab("Dictionary"))
         self.scrollable_frame_dictionary_tab.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
         self.scrollable_frame_dictionary_tab.grid_columnconfigure(0, weight=1)
         self.dictionary_entry_placehold = customtkinter.CTkBaseClass(self.scrollable_frame_dictionary_tab, height=10)
         self.dictionary_entry_placehold.grid(row=0, column=0, padx=0, pady=10)
-        self.dictionaryKey_entry = customtkinter.CTkEntry(self.scrollable_frame_dictionary_tab, placeholder_text="Key", width=75)
+        self.dictionaryKey_entry = customtkinter.CTkEntry(self.scrollable_frame_dictionary_tab, placeholder_text="Key", width=140)
         self.dictionaryKey_entry.place_configure(x=0)
         self.dictionary_colon_label = customtkinter.CTkLabel(self.scrollable_frame_dictionary_tab, text=":")
-        self.dictionary_colon_label.place(x=77)
-        self.dictionaryDef_entry = customtkinter.CTkEntry(self.scrollable_frame_dictionary_tab, placeholder_text="Def", width=75)
-        self.dictionaryDef_entry.place_configure(x=125)
+        self.dictionary_colon_label.place(x=145)
+        self.dictionaryDef_entry = customtkinter.CTkEntry(self.scrollable_frame_dictionary_tab, placeholder_text="Def", width=140)
+        self.dictionaryDef_entry.place_configure(x=232)
         self.dictionary_add_button = customtkinter.CTkButton(self.scrollable_frame_dictionary_tab, width=50, text="add", command=self.addDictionaryEntry)
-        self.dictionary_add_button.place(x=165)
+        self.dictionary_add_button.place(x=305)
         
         # set values
         self.appearance_mode_optionemenu.set("Dark")
@@ -175,15 +175,26 @@ class App(customtkinter.CTk):
             self.dictKey = dictKey
             self.dictDef = dictDef
             self.row = row
-            self.entry = customtkinter.CTkFrame(app.scrollable_frame_dictionary_tab, height=30)
+            self.entry = customtkinter.CTkFrame(app.scrollable_frame_dictionary_tab, height=30, width=500)
             self.entry.grid(row=row, column=0, padx=0, pady=10)
-            self.label = customtkinter.CTkLabel(self.entry, text=f"{dictKey} : {dictDef}", wraplength=200)
-            self.label.place(x=0)
+            self.label = customtkinter.CTkLabel(self.entry, text=f"{dictKey} : {dictDef}", wraplength=500)
+            self.label.place(x=10)
             self.button = customtkinter.CTkButton(self.entry, width=15, text="delete", command=self.deleteEntry)
-            self.button.place(x=150)
+            self.button.place(x=305)
         def deleteEntry(self):
             self.entry.destroy()
+            app.dictEntrys.remove(self)
+            f = open("dictionary.json")
+            dictionary = json.load(f)
+            f.close()
+            del dictionary[self.dictKey]
+            dumped = json.dumps(dictionary, indent="  ")
+            f = open("dictionary.json", "w")
+            f.write(dumped)
+            f.close()
         
+    #Updates
+    
     def updateSettings(self):
         f = open("settings.json")
         settings = json.load(f)
@@ -239,9 +250,9 @@ class App(customtkinter.CTk):
         f = open("dictionary.json")
         dictionary = json.load(f)
         f.close()
-        for entry in dictionary:
-            self.dictEntrys += 1
-            self.dictEntry(entry, dictionary[entry], self.dictEntrys, self)
+        for key in dictionary:
+            entry = self.dictEntry(key, dictionary[key], len(self.dictEntrys)+1, self)
+            self.dictEntrys.append(entry)
         
     def updateScriptSelect(self):
         f = open("settings.json")
@@ -279,6 +290,17 @@ class App(customtkinter.CTk):
         self.textbox.delete("1.0", tkinter.END)
         self.textbox.insert(tkinter.END, text)
         self.updateScripts("")
+        
+    def updateDictionary(self):
+        f = open("dictionary.json")
+        dictionary = json.load(f)
+        f.close()
+        for entry in self.dictEntrys:
+            dictionary[entry.dictKey] = entry.dictDef
+        dumped = json.dumps(dictionary, indent="  ")
+        f = open("dictionary.json", "w")
+        f.write(dumped)
+        f.close()
             
     #settings setters
     def writeToJSON(self, setting: str, value: str):
@@ -672,20 +694,13 @@ class App(customtkinter.CTk):
     #Dictionary setter
     
     def addDictionaryEntry(self):
-        self.dictEntrys += 1
         dictKey = self.dictionaryKey_entry.get()
         self.dictionaryKey_entry.delete(0, len(dictKey))
         dictDef = self.dictionaryDef_entry.get()
         self.dictionaryDef_entry.delete(0, len(dictDef))
-        entry = self.dictEntry(dictKey, dictDef, self.dictEntrys, self)
-        f = open("dictionary.json")
-        dictionary = json.load(f)
-        f.close()
-        dictionary[dictKey] = dictDef
-        dumped = json.dumps(dictionary, indent="  ")
-        f = open("dictionary.json", "w")
-        f.write(dumped)
-        f.close()
+        entry = self.dictEntry(dictKey, dictDef, len(self.dictEntrys) + 1, self)
+        self.dictEntrys.append(entry)
+        self.updateDictionary()
         
         
         
