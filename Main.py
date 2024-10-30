@@ -3,7 +3,7 @@ from videoFunctionsFFMPEG import videoFunctionsFFMPEG
 from deleteGeneratedFiles import deleteGeneratedFiles
 from loadingFunction import loadingFunction
 from pytubefix import YouTube
-import sys, os, simpleaudio, math, random, atexit, ffmpeg, json
+import sys, os, simpleaudio, random, atexit, ffmpeg, json
 
 modelList = ["tts_models/bg/cv/vits", "tts_models/cs/cv/vits", "tts_models/da/cv/vits", "tts_models/et/cv/vits", "tts_models/ga/cv/vits", "tts_models/en/ek1/tacotron2", "tts_models/en/ljspeech/tacotron2-DDC", "tts_models/en/ljspeech/tacotron2-DDC_ph", "tts_models/en/ljspeech/glow-tts", "tts_models/en/ljspeech/speedy-speech", "tts_models/en/ljspeech/tacotron2-DCA", "tts_models/en/ljspeech/vits", "tts_models/en/ljspeech/vits--neon", "tts_models/en/ljspeech/fast_pitch", "tts_models/en/ljspeech/overflow", "tts_models/en/ljspeech/neural_hmm", "tts_models/en/sam/tacotron-DDC", "tts_models/en/blizzard2013/capacitron-t2-c50", "tts_models/en/blizzard2013/capacitron-t2-c150_v2", "tts_models/en/multi-dataset/tortoise-v2", "tts_models/en/jenny/jenny", "tts_models/es/mai/tacotron2-DDC", "tts_models/es/css10/vits", "tts_models/fr/mai/tacotron2-DDC", "tts_models/fr/css10/vits", "tts_models/uk/mai/glow-tts", "tts_models/uk/mai/vits", "tts_models/zh-CN/baker/tacotron2-DDC-GST", "tts_models/nl/mai/tacotron2-DDC", "tts_models/nl/css10/vits", "tts_models/de/thorsten/tacotron2-DCA", "tts_models/de/thorsten/vits", "tts_models/de/thorsten/tacotron2-DDC", "tts_models/de/css10/vits-neon", "tts_models/ja/kokoro/tacotron2-DDC", "tts_models/tr/common-voice/glow-tts", "tts_models/it/mai_female/glow-tts", "tts_models/it/mai_female/vits", "tts_models/it/mai_male/glow-tts", "tts_models/it/mai_male/vits", "tts_models/ewe/openbible/vits", "tts_models/hau/openbible/vits", "tts_models/lin/openbible/vits", "tts_models/tw_akuapem/openbible/vits", "tts_models/tw_asante/openbible/vits", "tts_models/yor/openbible/vits", "tts_models/hu/css10/vits", "tts_models/el/cv/vits", "tts_models/fi/css10/vits", "tts_models/hr/cv/vits", "tts_models/lt/cv/vits", "tts_models/lv/cv/vits", "tts_models/mt/cv/vits", "tts_models/pl/mai_female/vits", "tts_models/pt/cv/vits", "tts_models/ro/cv/vits", "tts_models/sk/cv/vits", "tts_models/sl/cv/vits", "tts_models/sv/cv/vits", "tts_models/ca/custom/vits", "tts_models/fa/custom/glow-tts", "tts_models/bn/custom/vits-male", "tts_models/bn/custom/vits-female", "tts_models/be/common-voice/glow-tts"]
 
@@ -14,23 +14,25 @@ class autoShorts:
         self.startUpScreen()
         atexit.register(self.crashHandler)
         f = open("settings.json")
-        settings = json.load(f)
+        self.settings = json.load(f)
         f.close()
-        deleteGeneratedFilesClass = deleteGeneratedFiles([])
+        self.deleteGeneratedFilesClass = deleteGeneratedFiles([])
+        
+    def run(self):
         self.loadingClass.startLoadingAnimation()
         scriptFileList = os.listdir(settings["scriptsFolderName"])
         for i in range(0, len(scriptFileList)):
             script = self.getScripFile(self.programDirectory, settings["scriptsFolderName"], scriptFileList[i])
-            deleteGeneratedFilesClass.deleteGeneratedFiles()
-            self.createAudioFile(settings["ttsModel"], script, settings["language"], settings["speed"], settings["outputAudioName"])
-            videoFunctionsFFMPEG.createSubtitles(self.programDirectory, settings["whisperModel"], settings["outputAudioName"], settings["subtitleOutputFileName"], settings["language"])
-            videoFunctionsFFMPEG.formatAssFile("sub-titles.%(language)s.ass" % settings, settings["Name"], settings["Fontname"], settings["Fontsize"], settings["PrimaryColour"], settings["SecondaryColour"], settings["OutlineColour"], settings["BackColour"], settings["Bold"], settings["Italic"], settings["UnderLine"], settings["StrikeOut"], settings["ScaleX"], settings["ScaleY"], settings["Spacing"], settings["Angle"], settings["BorderStyle"], settings["Outline"], settings["Shadow"], settings["Alignment"], settings["MarginL"], settings["MarginR"], settings["MarginV"], settings["Encoding"])
-            self.makeBackgroundVideoSegment(settings["backgroundVideoFolderName"], settings["outputAudioName"])
-            videoFunctionsFFMPEG.changeVideoResolution("9:16", "TEMP.mp4", settings["outputVideoName"])
-            videoFunctionsFFMPEG.applySubtitlesToVideo("sub-titles.%(language)s.ass" % settings, settings["outputVideoName"], "TEMP.mp4")
-            videoFunctionsFFMPEG.applyAudioToVideo(f"{self.programDirectory}/TEMP.mp4", settings["outputAudioName"], settings["outputVideoFolderName"], str(i + 1) + settings["outputVideoName"])
+            self.deleteGeneratedFilesClass.deleteGeneratedFiles()
+            self.createAudioFile(self.settings["ttsModel"], script, self.settings["language"], self.settings["speed"], self.settings["outputAudioName"])
+            videoFunctionsFFMPEG.createSubtitles(self.programDirectory, self.settings["whisperModel"], self.settings["outputAudioName"], self.settings["subtitleOutputFileName"], self.settings["language"])
+            videoFunctionsFFMPEG.formatAssFile("sub-titles.%(language)s.ass" % self.settings, self.settings["Name"], self.settings["Fontname"], self.settings["Fontsize"], self.settings["PrimaryColour"], self.settings["SecondaryColour"], self.settings["OutlineColour"], self.settings["BackColour"], self.settings["Bold"], self.settings["Italic"], self.settings["UnderLine"], self.settings["StrikeOut"], self.settings["ScaleX"], self.settings["ScaleY"], self.settings["Spacing"], self.settings["Angle"], self.settings["BorderStyle"], self.settings["Outline"], self.settings["Shadow"], self.settings["Alignment"], self.settings["MarginL"], self.settings["MarginR"], self.settings["MarginV"], self.settings["Encoding"])
+            self.makeBackgroundVideoSegment(self.settings["backgroundVideoFolderName"], self.settings["outputAudioName"])
+            videoFunctionsFFMPEG.changeVideoResolution("9:16", "TEMP.mp4", self.settings["outputVideoName"])
+            videoFunctionsFFMPEG.applySubtitlesToVideo("sub-titles.%(language)s.ass" % self.settings, self.settings["outputVideoName"], "TEMP.mp4")
+            videoFunctionsFFMPEG.applyAudioToVideo(f"{self.programDirectory}/TEMP.mp4", self.settings["outputAudioName"], self.settings["outputVideoFolderName"], str(i + 1) + self.settings["outputVideoName"])
             os.remove(f"{self.programDirectory}/TEMP.mp4")
-        deleteGeneratedFilesClass.deleteGeneratedFiles()
+        self.deleteGeneratedFilesClass.deleteGeneratedFiles()
         self.loadingClass.endLoadingAnimation()
         self.exitHandler("All Tasks Completed")
            
@@ -131,14 +133,17 @@ class utils(autoShorts):
                     pass
             autoShorts.exitHandler("All TTS models Played")
             
-    def downloadBackgroudVidoes(videoBackgroundLinkList: list, videoBackgroundFolder: str) -> None:  
+    def downloadBackgroudVidoes() -> None: 
+        f = open("settings.json")
+        settings = json.load(f)
+        f.close()
         loadingClass = loadingFunction()
         loadingClass.startLoadingAnimation()
         loadingClass.description = "Downloading requested video(s)"
-        if len(videoBackgroundLinkList) <= 0:
+        if len(settings["backgroundVideoList"]) <= 0:
             loadingClass.endLoadingAnimation()
-            raise Exception(f"No videos in \"{videoBackgroundLinkList}\" list")
-        for videoLink in videoBackgroundLinkList:
+            raise Exception("No videos in \"%(backgroundVideoList)s\" list" % settings)
+        for videoLink in settings["backgroundVideoList"]:
             try:
                 yt = YouTube(videoLink)
             except:
@@ -156,7 +161,7 @@ if __name__ == "__main__":
     settings = json.load(f)
     f.close()
     if (sys.argv.count("downloadVideos") > 0):
-            utils.downloadBackgroudVidoes(settings["backgroundVideoList"], settings["backgroundVideoFolderName"])
+            utils.downloadBackgroudVidoes()
     elif (sys.argv.count("loopAllModels") > 0):
         utils.loopAllModels(settings["language"], settings["outputAudioName"])
         raise Exception("Opreation Complete")

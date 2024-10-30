@@ -27,4 +27,4 @@ class loadingFunction:
     def setDescription(self, description: str):
         self.description = description
     def clearDescription(self):
-        self.description = "loading"       
+        self.description = "loading"

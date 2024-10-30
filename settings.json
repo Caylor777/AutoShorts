@@ -1,5 +1,5 @@
 {
-  "scriptsFolderName": "scripts",
+  "scriptsFolderName": "Scripts",
   "ttsModel": "tts_models/en/jenny/jenny",
   "language": "en",
   "emotion": null,

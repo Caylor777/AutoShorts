@@ -1,7 +1,8 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
-import json, os
+import json, os, threading, sys, time
+from Main import utils
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -10,7 +11,7 @@ modelList = ["tts_models/bg/cv/vits", "tts_models/cs/cv/vits", "tts_models/da/cv
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
-
+        
         # configure window
         self.title("Auto Shorts")
         self.geometry(f"{1100}x{580}")
@@ -95,13 +96,15 @@ class App(customtkinter.CTk):
         self.backgroundVideoLink_input_comboBox = customtkinter.CTkComboBox(self.scrollable_frame_settings_tab, values=["Background Video Links:", ""], command=self.backgroundVideoListActiveIndexSetter, width=400)
         self.backgroundVideoLink_input_comboBox.grid(row=10, column=0, padx=0, pady=10)
         self.backgroundVideoLink_input_comboBox.bind("<KeyRelease>", self.backgroundVideoListHandler)
+        self.downloadBackgroundVidoes_button = customtkinter.CTkButton(self.scrollable_frame_settings_tab, text="Download Background Vidoes", command=self.downloadBackgroundVidoes)
+        self.downloadBackgroundVidoes_button.grid(row=11, column=0, padx=20, pady=10)
         self.resetSettings_button = customtkinter.CTkButton(self.scrollable_frame_settings_tab, text="Reset Settings", command=self.resetSettings)
-        self.resetSettings_button.grid(row=11, column=0, padx=0, pady=10)
+        self.resetSettings_button.grid(row=12, column=0, padx=0, pady=10)
         #Subtitle Settings tab
         self.scrollable_frame_subtitle_tab = customtkinter.CTkScrollableFrame(self.tabview.tab("Subtitle Settings"))
         self.scrollable_frame_subtitle_tab.grid(row=0, column=0, padx=(0, 0), pady=(0, 0), sticky="nsew")
         self.scrollable_frame_subtitle_tab.grid_columnconfigure(0, weight=1)
-        self.name_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Name: N/A", command=self.nameHandler, width=400)
+        self.name_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Name: N/A", command=self.nameHandler, width=400) 
         self.name_input_button.grid(row=0, column=0, padx=0, pady=10)
         self.fontname_input_button = customtkinter.CTkButton(self.scrollable_frame_subtitle_tab, text="Font Name: N/A", command=self.fontnameHandler, width=400)
         self.fontname_input_button.grid(row=1, column=0, padx=0, pady=10)
@@ -701,7 +704,29 @@ class App(customtkinter.CTk):
         entry = self.dictEntry(dictKey, dictDef, len(self.dictEntrys) + 1, self)
         self.dictEntrys.append(entry)
         self.updateDictionary()
+    
+    def loadingWindow(self):
+        currentCharacterList = ["|", "/", "-", " \\"]
+        currentCharacter = 0
+        new_window=customtkinter.CTkToplevel()
+        label=customtkinter.CTkLabel(new_window, font=("Arial", 50), text="Downloading Videos /")
+        label.pack()
+        new_window.after(20, new_window.lift)
+        downloading = threading.Thread(target=utils.downloadBackgroudVidoes)
+        downloading.start()
+        while downloading.is_alive():
+            label.configure(text=f"Downloading Video(s) {currentCharacterList[currentCharacter]}")
+            time.sleep(0.1)
+            if currentCharacter >= len(currentCharacterList) - 1:
+                currentCharacter = 0
+            else:
+                currentCharacter = currentCharacter + 1
+        label.configure(text="Video(s) Saved")
+        time.sleep(1)
+        new_window.destroy()
         
+    def downloadBackgroundVidoes(self):
+        threading.Thread(target=self.loadingWindow).start()
         
         
         
