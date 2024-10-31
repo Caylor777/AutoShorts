@@ -1,8 +1,9 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
-import json, os, threading, sys, time
-from Main import utils
+import json, os, threading
+from Main import shortsUtils
+from utils import tkTopLevelWinodwLoadingAnimation
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -704,31 +705,10 @@ class App(customtkinter.CTk):
         entry = self.dictEntry(dictKey, dictDef, len(self.dictEntrys) + 1, self)
         self.dictEntrys.append(entry)
         self.updateDictionary()
-    
-    def loadingWindow(self):
-        currentCharacterList = ["|", "/", "-", " \\"]
-        currentCharacter = 0
-        new_window=customtkinter.CTkToplevel()
-        new_window.title("Loading Animation")
-        label=customtkinter.CTkLabel(new_window, font=("Arial", 50), text="Downloading Videos /")
-        label.pack()
-        new_window.after(20, new_window.lift)
-        downloading = threading.Thread(target=utils.downloadBackgroudVidoes)
-        downloading.start()
-        while downloading.is_alive():
-            label.configure(text=f"Downloading Video(s) {currentCharacterList[currentCharacter]}")
-            time.sleep(0.1)
-            if currentCharacter >= len(currentCharacterList) - 1:
-                currentCharacter = 0
-            else:
-                currentCharacter = currentCharacter + 1
-        label.configure(text="Video(s) Saved")
-        time.sleep(1)
-        new_window.destroy()
         
     def downloadBackgroundVidoes(self):
-        threading.Thread(target=self.loadingWindow).start()
-        
+        self.loadingFunction = tkTopLevelWinodwLoadingAnimation(shortsUtils.downloadBackgroudVidoes, "Downloading Video(s)", "Video(s) Saved", "Roboto", 50)
+        threading.Thread(target=self.loadingFunction.loadingWindow).start()
         
         
 if __name__ == "__main__":

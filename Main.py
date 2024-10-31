@@ -1,7 +1,8 @@
 from TTS.api import TTS
 from videoFunctionsFFMPEG import videoFunctionsFFMPEG
 from deleteGeneratedFiles import deleteGeneratedFiles
-from loadingFunction import loadingFunction
+from utils import loadingFunction
+from utils import topLevelWindowError
 from pytubefix import YouTube
 import sys, os, simpleaudio, random, atexit, ffmpeg, json
 
@@ -105,7 +106,10 @@ class autoShorts:
         #get random time stamp
         timeAvailable = (durationVideo - durationAudio) - 1
         if timeAvailable < durationAudio:
-            autoShorts.exitHandler("Video background file not long enough")
+            if __name__ == "__main__":
+                autoShorts.exitHandler("Video background file not long enough")
+            else:
+                topLevelWindowError.raiseError("Video background file not long enough")
         timeStamp = random.randrange(1, int(timeAvailable))
         timeStamp = timeStamp - 1
         timeStamp = int(timeStamp)
@@ -116,7 +120,7 @@ class autoShorts:
         .run(overwrite_output = True)
         )
         
-class utils(autoShorts):
+class shortsUtils(autoShorts):
     def loopAllModels(self, language: str, outputAudioName: str) -> None:
             for model in modelList:
                 if model.find(language) == 11:
@@ -142,17 +146,26 @@ class utils(autoShorts):
         loadingClass.description = "Downloading requested video(s)"
         if len(settings["backgroundVideoList"]) <= 0:
             loadingClass.endLoadingAnimation()
-            raise Exception("No videos in \"%(backgroundVideoList)s\" list" % settings)
+            if __name__ == "__main__":
+                raise Exception("No videos in background videos list")
+            else:
+                topLevelWindowError.raiseError("ERROR: No videos in background videos list")
         for videoLink in settings["backgroundVideoList"]:
             try:
                 yt = YouTube(videoLink)
             except:
-                raise Exception("Connection Error")
+                if __name__ == "__main__":
+                    raise Exception("Connection Error")
+                else:
+                    topLevelWindowError.raiseError("ERROR: Connection Error")
             downloadVideo = yt.streams.filter(file_extension='mp4').get_highest_resolution()
             try:
                 downloadVideo.download(output_path=settings["backgroundVideoFolderName"])
             except:
-                print("Failed to download video")
+                if __name__ == "__main__":
+                    print("Failed to download video(s)")
+                else:
+                    topLevelWindowError.raiseError("ERROR: Failed To Download Video(s)")
         print("Video(s) Saved")
         loadingClass.endLoadingAnimation()
     
@@ -161,9 +174,9 @@ if __name__ == "__main__":
     settings = json.load(f)
     f.close()
     if (sys.argv.count("downloadVideos") > 0):
-            utils.downloadBackgroudVidoes()
+            shortsUtils.downloadBackgroudVidoes()
     elif (sys.argv.count("loopAllModels") > 0):
-        utils.loopAllModels(settings["language"], settings["outputAudioName"])
+        shortsUtils.loopAllModels(settings["language"], settings["outputAudioName"])
         raise Exception("Opreation Complete")
     elif (sys.argv.count("run") > 0):
         main = autoShorts()
