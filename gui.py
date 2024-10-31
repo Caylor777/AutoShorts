@@ -709,6 +709,7 @@ class App(customtkinter.CTk):
         currentCharacterList = ["|", "/", "-", " \\"]
         currentCharacter = 0
         new_window=customtkinter.CTkToplevel()
+        new_window.title("Loading Animation")
         label=customtkinter.CTkLabel(new_window, font=("Arial", 50), text="Downloading Videos /")
         label.pack()
         new_window.after(20, new_window.lift)
