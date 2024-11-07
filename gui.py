@@ -3,6 +3,7 @@ import tkinter.messagebox
 import customtkinter
 import json, os, threading
 from Main import shortsUtils
+from Main import autoShorts
 from utils import tkTopLevelWinodwLoadingAnimation
 
 customtkinter.set_appearance_mode("Dark")  # Modes: "System" (standard), "Dark", "Light"
@@ -25,24 +26,28 @@ class App(customtkinter.CTk):
         # create sidebar frame with widgets
         self.sidebar_frame = customtkinter.CTkFrame(self, width=140, corner_radius=0)
         self.sidebar_frame.grid(row=0, column=0, rowspan=4, sticky="nsew")
-        self.sidebar_frame.grid_rowconfigure(4, weight=1)
+        self.sidebar_frame.grid_rowconfigure(5, weight=1)
         self.logo_label = customtkinter.CTkLabel(self.sidebar_frame, text="Auto Shorts", font=customtkinter.CTkFont(size=20, weight="bold"))
         self.logo_label.grid(row=0, column=0, padx=20, pady=(20, 10))
-        self.run_button = customtkinter.CTkButton(self.sidebar_frame, text="Generate Sh*t posts")
+        self.run_button = customtkinter.CTkButton(self.sidebar_frame, text="Generate Sh*t posts", command=self.runMainProgram)
         self.run_button.grid(row=1, column=0, padx=20, pady=10)
-        self.sidebar_script_select = customtkinter.CTkOptionMenu(self.sidebar_frame, command=self.changeScript, values=["test", "Test2"])
+        self.sidebar_script_select = customtkinter.CTkOptionMenu(self.sidebar_frame, command=self.changeScript, values=[])
         self.sidebar_script_select.grid(row=2, column=0, padx=20, pady=10)
+        self.newScript_button = customtkinter.CTkButton(self.sidebar_frame, text="New Script File", command=self.newScriptFile)
+        self.newScript_button.grid(row=3, column=0, padx=20, pady=10)
+        self.removeScript_button = customtkinter.CTkButton(self.sidebar_frame, text="Delete Selected Script", command=self.deleteScriptFile)
+        self.removeScript_button.grid(row=4, column=0, padx=20, pady=10)
         #place hold
         self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
-        self.appearance_mode_label.grid(row=5, column=0, padx=20, pady=(10, 0))
+        self.appearance_mode_label.grid(row=6, column=0, padx=20, pady=(10, 0))
         self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["Light", "Dark", "System"],
                                                                        command=self.change_appearance_mode_event)
-        self.appearance_mode_optionemenu.grid(row=6, column=0, padx=20, pady=(10, 10))
+        self.appearance_mode_optionemenu.grid(row=7, column=0, padx=20, pady=(10, 10))
         self.scaling_label = customtkinter.CTkLabel(self.sidebar_frame, text="UI Scaling:", anchor="w")
-        self.scaling_label.grid(row=7, column=0, padx=20, pady=(10, 0))
+        self.scaling_label.grid(row=8, column=0, padx=20, pady=(10, 0))
         self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["80%", "90%", "100%", "110%", "120%"],
                                                                command=self.change_scaling_event)
-        self.scaling_optionemenu.grid(row=8, column=0, padx=20, pady=(10, 20))
+        self.scaling_optionemenu.grid(row=9, column=0, padx=20, pady=(10, 20))
 
         # create textbox
         self.textbox = customtkinter.CTkTextbox(self, width=350, state="normal")
@@ -197,6 +202,35 @@ class App(customtkinter.CTk):
             f.write(dumped)
             f.close()
         
+    #Sidebar Functions   
+        
+    def runMainProgram(value):
+        main = autoShorts()
+        window = tkTopLevelWinodwLoadingAnimation(main.run, "loading", "Sh*t post(s) created", "roboto", 50)
+        window.loadingWindow()
+        
+    def newScriptFile(self):
+        f = open("settings.json")
+        settings = json.load(f)
+        f.close()
+        scriptsFolderName = settings["scriptsFolderName"]
+        scriptCount = len(self.sidebar_script_select._values) + 1
+        with open(f"{scriptsFolderName}/Script({scriptCount}).txt", "w") as file:
+            file.write(f"New Script {scriptCount}")
+        self.updateScriptSelect()
+        self.sidebar_script_select.set(f"Script({scriptCount}).txt")
+        self.changeScript(None)
+        
+    def deleteScriptFile(self):
+        if not (len(self.sidebar_script_select._values) <= 1):
+            f = open("settings.json")
+            settings = json.load(f)
+            f.close()
+            scriptsFolderName = settings["scriptsFolderName"]
+            os.remove(f"{scriptsFolderName}/{self.sidebar_script_select.get()}")    
+            self.updateScriptSelect()
+            self.sidebar_script_select.set(self.sidebar_script_select._values[0])
+            self.changeScript(None)
     #Updates
     
     def updateSettings(self):
@@ -270,6 +304,7 @@ class App(customtkinter.CTk):
         self.sidebar_script_select.configure(values=scripts)
         
     def updateScripts(self, value):
+        self.applyDictionary()
         self.updateScriptSelect()
         f = open("settings.json")
         settings = json.load(f)
@@ -283,6 +318,21 @@ class App(customtkinter.CTk):
         text = text[:-1]
         self.textbox.delete("1.0", tkinter.END)
         self.textbox.insert(tkinter.END, text)
+
+    def applyDictionary(self):
+        f = open("dictionary.json")
+        dictionary = json.load(f)
+        f.close()
+        checkList = ["?", ",", ".", " "]
+        for entry in dictionary:
+            for i in checkList:  
+                try:
+                    text = self.textbox.get("1.0", tkinter.END).replace(f" {entry}{i}", " " + dictionary[entry] + i)
+                    text = text[:-1]
+                    self.textbox.delete("1.0", tkinter.END)
+                    self.textbox.insert(tkinter.END, text)
+                except:
+                    pass
 
     def changeScript(self, value):
         f = open("settings.json")
@@ -709,7 +759,6 @@ class App(customtkinter.CTk):
     def downloadBackgroundVidoes(self):
         self.loadingFunction = tkTopLevelWinodwLoadingAnimation(shortsUtils.downloadBackgroudVidoes, "Downloading Video(s)", "Video(s) Saved", "Roboto", 50)
         threading.Thread(target=self.loadingFunction.loadingWindow).start()
-        
         
 if __name__ == "__main__":
     app = App()

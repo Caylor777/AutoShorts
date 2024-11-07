@@ -18,12 +18,13 @@ class autoShorts:
         self.settings = json.load(f)
         f.close()
         self.deleteGeneratedFilesClass = deleteGeneratedFiles([])
+        self.startUpScreen()
         
     def run(self):
         self.loadingClass.startLoadingAnimation()
-        scriptFileList = os.listdir(settings["scriptsFolderName"])
+        scriptFileList = os.listdir(self.settings["scriptsFolderName"])
         for i in range(0, len(scriptFileList)):
-            script = self.getScripFile(self.programDirectory, settings["scriptsFolderName"], scriptFileList[i])
+            script = self.getScripFile(self.programDirectory, self.settings["scriptsFolderName"], scriptFileList[i])
             self.deleteGeneratedFilesClass.deleteGeneratedFiles()
             self.createAudioFile(self.settings["ttsModel"], script, self.settings["language"], self.settings["speed"], self.settings["outputAudioName"])
             videoFunctionsFFMPEG.createSubtitles(self.programDirectory, self.settings["whisperModel"], self.settings["outputAudioName"], self.settings["subtitleOutputFileName"], self.settings["language"])
@@ -31,7 +32,12 @@ class autoShorts:
             self.makeBackgroundVideoSegment(self.settings["backgroundVideoFolderName"], self.settings["outputAudioName"])
             videoFunctionsFFMPEG.changeVideoResolution("9:16", "TEMP.mp4", self.settings["outputVideoName"])
             videoFunctionsFFMPEG.applySubtitlesToVideo("sub-titles.%(language)s.ass" % self.settings, self.settings["outputVideoName"], "TEMP.mp4")
-            videoFunctionsFFMPEG.applyAudioToVideo(f"{self.programDirectory}/TEMP.mp4", self.settings["outputAudioName"], self.settings["outputVideoFolderName"], str(i + 1) + self.settings["outputVideoName"])
+            videoName = self.settings["outputVideoName"].split(".")
+            videoName1 = videoName[0] + str(i + 1)
+            for i in range(1, len(videoName)):
+                videoName1 = f"{videoName1}.{videoName[i]}"
+            videoFunctionsFFMPEG.applyAudioToVideo(f"{self.programDirectory}/TEMP.mp4", self.settings["outputAudioName"], videoName1)
+            os.replace(videoName1, self.settings["outputVideoFolderName"] + "\\" + videoName1)
             os.remove(f"{self.programDirectory}/TEMP.mp4")
         self.deleteGeneratedFilesClass.deleteGeneratedFiles()
         self.loadingClass.endLoadingAnimation()
@@ -180,5 +186,6 @@ if __name__ == "__main__":
         raise Exception("Opreation Complete")
     elif (sys.argv.count("run") > 0):
         main = autoShorts()
+        main.run()
     else:
         raise Exception("no vaild arguments recived")
