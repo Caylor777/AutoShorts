@@ -8,18 +8,27 @@ Install before using:
 "https://visualstudio.microsoft.com/visual-cpp-build-tools/" and download desktop development with C++  
 "https://github.com/espeak-ng/espeak-ng/releases/tag/1.51" and download the .msi
 
+## How it works  
+For evey script in "Scripts" folder a video is made  
+Videos in the "backgroundVideos" folder will be randomly chosen at a random time stamp chosen for each script  
+A video will be made and put it the "outputVideos" folder
+
 ## Usage
-How to Use:  
-    Use "settings.txt" to config the program (Note: Must keep space before and after "=")  
-    Put ".txt" Files in the "Scripts" Folder and the program will make a new video per script in the folder  
-    Youtube(only) links in the "backgroundVideoList.txt" file will downloaded if the "downloadVideosInLinksFile" setting is "True"  
-    "downloadVideosInLinksFile = True" will prevent the main program from running and will only download the videos  
-    (Note: "downloadVideosInLinksFile" is for easily downloading background videos and use a new line for each link)  
-How it works:  
-    For evey script in "Scripts" folder a video is made  
-    Videos in the "backgroundVideos" folder will be randomly chosen for each script  
-    Run "Main.py" to use program  
-All TTS Voices:  
+How to Use (GUI):  
+    In console run "python gui.py"  
+    Configure settings with the settings pannel on the right
+    Type scripts in the textbox in the middle
+    Generate the video(s) with "generate sh*t posts" button on the left
+How to Use (Console):  
+    To Run:  
+        Use "settings.json" to configue the program  
+        Put ".txt" Files in the "Scripts" Folder and the program will make a new video per script in the folder  
+        In the console run "python Main.py run"  
+    To Download Background Videos:  
+        Youtube(only) put links in the "backgroundVideoList" key in the "settings.json" file  
+        In the console run "python Main.py downloadVideos"
+
+## All TTS Voices:  
     1: tts_models/multilingual/multi-dataset/xtts_v2  
     2: tts_models/multilingual/multi-dataset/xtts_v1.1  
     3: tts_models/multilingual/multi-dataset/your_tts  
@@ -101,4 +110,4 @@ https://github.com/Caylor777
 MIT License
 
 ## Contact
-https://github.com/Caylor777/AutoShorts
+caylor777+autoshorts@gmail.com
