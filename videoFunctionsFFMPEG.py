@@ -1,16 +1,17 @@
-def format_time(seconds):
-        from math import floor
-        hours = floor(seconds / 3600)
-        seconds %= 3600
-        minutes = floor(seconds / 60)
-        seconds %= 60
-        milliseconds = round((seconds - floor(seconds)) * 1000)
-        seconds = floor(seconds)
-        formatted_time = f"{hours:02d}:{minutes:02d}:{seconds:01d},{milliseconds:03d}"
-        return formatted_time
+class format_time:
+    def format_time(seconds):
+            from math import floor
+            hours = floor(seconds / 3600)
+            seconds %= 3600
+            minutes = floor(seconds / 60)
+            seconds %= 60
+            milliseconds = round((seconds - floor(seconds)) * 1000)
+            seconds = floor(seconds)
+            formatted_time = f"{hours:02d}:{minutes:02d}:{seconds:01d},{milliseconds:03d}"
+            return formatted_time
+    
 import ffmpeg
 class videoFunctionsFFMPEG:
-    
     def createSubtitles(workingDirectory: str, whisperModel: str, outputAudioName: str, subtitleOutputFileName: str, language: str) -> None:
         import os
         "whisperModel-\"tiny\", \"base\", \"small\", \"medium\", \"large\", \"large-v3\""
@@ -27,8 +28,8 @@ class videoFunctionsFFMPEG:
         subtitle_file = f"sub-{subtitleOutputFileName}.{language}.srt"
         text = ""
         for index, segment in enumerate(segments):
-            segment_start = format_time(segment.start)
-            segment_end = format_time(segment.end)
+            segment_start = format_time.format_time(segment.start)
+            segment_end = format_time.format_time(segment.end)
             text += f"{str(index+1)} \n"
             text += f"{segment_start} --> {segment_end} \n"
             text += f"{segment.text} \n"
@@ -69,7 +70,7 @@ class videoFunctionsFFMPEG:
             f.write(formatedStyle)
             f.close()
         
-    def changeVideoResolution(aspectRatio: str, inputVideoPath: str, outputVideoPath) -> None:
+    def changeVideoResolution(aspectRatio: str, inputVideoPath: str, outputVideoPath: str) -> None:
         "aspectRatio-x:y"
         aspectRatio = aspectRatio.replace(":", "/")
         (
@@ -80,7 +81,7 @@ class videoFunctionsFFMPEG:
         .run(overwrite_output = True)
         )
         
-    def applySubtitlesToVideo(assFileName: str, inputVideoPath: str, outputVideoPath) -> None:
+    def applySubtitlesToVideo(assFileName: str, inputVideoPath: str, outputVideoPath: str) -> None:
         ".ass file must be in the same directory as the input video"
         (
         ffmpeg
@@ -98,4 +99,3 @@ class videoFunctionsFFMPEG:
         .output(outputVideoPath)
         .run(overwrite_output=True)
         )
-        
